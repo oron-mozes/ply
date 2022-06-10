@@ -1,0 +1,28 @@
+{
+  "name": "ply-cli",
+  "version": "1.0.3",
+  "description": "\"Ply-cli\" is a cli tool that aim to entertain you while you wait for any process to be over.",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "node manager/config.js",
+    "release": "npm publish --access public"
+  },
+  "bin": {
+    "ply-build": "./bin/build.js",
+    "ply-install": "./bin/install.js",
+    "ply-add": "./bin/add.js",
+    "ply-test": "./bin/test.js"
+  },
+  "keywords": [
+    "cli"
+  ],
+  "author": "Oron Mozes",
+  "license": "ISC",
+  "dependencies": {
+    "node-notifier": "^10.0.1",
+    "os": "^0.1.2",
+    "shelljs": "^0.8.5",
+    "yargs": "^17.5.1",
+    "yt-play-cli": "^0.13.5"
+  }
+}

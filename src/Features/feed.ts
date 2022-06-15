@@ -6,7 +6,7 @@ import { notify } from 'node-notifier';
 export default async function () {
   const argv = new Set(hideBin(process.argv));
   
-  if (argv.has('-feed') || argv.has('--feed')) {
+  if ( argv.has('--p-feed')) {
     const feed:{timesetmp: number, items:{id: string, description:string,icon:string,image:string, title: string, externalLink?: string}[]} = JSON.parse(await fs.readFileSync(`${getLocalStorage()}/feed.json`, 'utf-8'));
     const seenIndex = new Set([]);
     //check if need to refetch / update the feed with more data

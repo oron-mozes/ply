@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "prepare": "node manager/config.js",
-    "release": "npm publish --access public"
+    "release": "npm publish --access public",
+    "postinstall": "node ./posinstall.js"
   },
   "bin": {
     "ply-build": "./bin/build.js",
     "ply-install": "./bin/install.js",
     "ply-add": "./bin/add.js",
-    "ply-test": "./bin/test.js",
-    "ply-mkdir": "./bin/mkdir.js"
+    "ply-test": "./bin/test.js"
   },
   "keywords": [
     "cli"

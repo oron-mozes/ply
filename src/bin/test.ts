@@ -9,10 +9,10 @@ import { userInfo } from 'os';
 import { hideBin } from 'yargs/helpers'
 import { ChildProcess } from 'child_process';
 import ytp from 'yt-play-cli';
-import { reportProcessDuration } from '../utils';
-import { ACTION } from '../types';
+import { reportProcessDuration } from '../../utils';
+import { ACTION } from '../../types';
 
-export const addFn = (executionProcess: ChildProcess, startTime: number) => {
+export const testFn = (executionProcess: ChildProcess, startTime: number) => {
   const user = userInfo();
   const argv = hideBin(process.argv);
   echo(JSON.stringify(argv))
@@ -39,8 +39,8 @@ export const addFn = (executionProcess: ChildProcess, startTime: number) => {
   });
 
   executionProcess.stdout?.once('end', async (data: string) => {
-    await reportProcessDuration(startTime, ACTION.ADD);
     /* ... do something with data ... */
+    await reportProcessDuration(startTime, ACTION.TEST);
     echo(`????: ${data}`)
     notify(
       {

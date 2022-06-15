@@ -8,8 +8,8 @@ import { notify } from 'node-notifier';
 import { userInfo } from 'os';
 import { ChildProcess } from 'child_process';
 import { hideBin } from 'yargs/helpers'
-import { reportProcessDuration } from '../utils';
-import { ACTION } from '../types';
+import { reportProcessDuration } from '../../utils';
+import { ACTION } from '../../types';
 
 export const installFn = (executionProcess: ChildProcess, startTime: number) => {
   const user = userInfo();

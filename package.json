@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "release": "npm publish --access public",
-    "postinstall": "tsc && chmod a+x dist/src/controller.js && node ./dist/postinstall.js"
+    "postinstall": "tsc && chmod a+x dist/src/**/*.js && node ./dist/postinstall.js"
   },
   "bin": {
     "ply": "./dist/src/controller.js"
@@ -17,12 +17,14 @@
   "author": "Oron Mozes",
   "license": "ISC",
   "dependencies": {
+    "@marcster/snake-js": "^1.0.1",
     "axios": "^0.27.2",
     "node-notifier": "^10.0.1",
     "os": "^0.1.2",
     "path": "^0.12.7",
     "readline": "^1.3.0",
     "shelljs": "^0.8.5",
+    "ttab": "^0.7.2",
     "typescript": "^4.7.3",
     "yargs": "^17.5.1",
     "yt-play-cli": "^0.13.5"

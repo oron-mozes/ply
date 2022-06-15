@@ -5,7 +5,7 @@
 
 import { exit } from 'shelljs';
 import { ChildProcess } from 'child_process';
-import { reportProcessDuration } from '../utils';
+import { reportProcessDuration } from '../../utils';
 
 export const defaultFn = (executionProcess: ChildProcess, startTime: number, executionCommand: string) => {
   executionProcess.stdout?.once('data', (data) => {

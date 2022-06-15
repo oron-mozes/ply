@@ -3,15 +3,14 @@
 //https://www.npmjs.com/package/node-notifier
 //https://www.npmjs.com/package/os
 
-import { echo, exit } from 'shelljs';
-import { notify } from 'node-notifier';
-import { userInfo } from 'os';
-import { hideBin } from 'yargs/helpers'
+import { echo } from 'shelljs';
 import { ChildProcess } from 'child_process';
-import YT from '../src/Features/YT';
-import { ACTION } from '../types';
-import { reportProcessDuration } from '../utils';
-import feed from '../src/Features/feed';
+import { userInfo } from 'os';
+import { hideBin } from 'yargs/helpers';
+import YT from '../Features/YT';
+
+import feed from '../Features/feed';
+import trivia from '../Features/trivia';
 
 export const buildFn = (executionProcess: ChildProcess, startTime: number, projectData: {name: string, averageDuration:number | null, personalDuration:number | null}) => {
   const user = userInfo();
@@ -19,7 +18,8 @@ export const buildFn = (executionProcess: ChildProcess, startTime: number, proje
   echo(JSON.stringify(argv))
 
   YT(projectData.personalDuration ?? 3);
-  feed()
+  feed();
+  trivia()
   // executionProcess.stdout?.once('data', (data) => {
   //   /* ... do something with data ... */
 

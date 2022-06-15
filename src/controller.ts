@@ -2,17 +2,17 @@
 
 import { echo, exec } from 'shelljs';
 import { hideBin } from 'yargs/helpers'
-import { buildFn } from '../bin/build';
+import { buildFn } from './bin/build';
 import axios from 'axios';
 import { apiBaseUrl } from '../consts';
 import { getPackageJson } from './services/read-package-json';
 import fs from 'fs';
 import { getLocalStorage } from '../utils';
-import { installFn } from '../bin/install';
+import { installFn } from './bin/install';
 import { ACTION, PACKAGE_MANAGER, ProjectData } from '../types';
-import { testFn } from '../bin/test';
-import { addFn } from '../bin/add';
-import { defaultFn } from '../bin/default';
+import { testFn } from './bin/test';
+import { addFn } from './bin/add';
+import { defaultFn } from './bin/default';
 import YT from './Features/YT';
 
 (async function () {

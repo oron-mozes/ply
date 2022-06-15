@@ -2,22 +2,20 @@
 //https://www.npmjs.com/package/shelljs
 //https://www.npmjs.com/package/node-notifier
 //https://www.npmjs.com/package/os
-const { exec, echo } = require("shelljs");
-const path = require("path");
-const fs = require("fs");
-const axios = require("axios");
-const { notify } = require("node-notifier");
-const user = require("os").userInfo();
-const yargs = require("yargs");
-const ytp = require("yt-play-cli");
 
-const { hideBin } = require("yargs/helpers");
+import { exec, echo } from 'shelljs';
+import { hideBin } from 'yargs/helpers'
+import path from 'path';
+import fs from 'fs';
+
+const axios = require("axios");
 const argv = hideBin(process.argv);
 const localStoragePath = path.resolve(
   __dirname.replace("/bin", ""),
   "local-storage"
 );
 exec(`mkdir ${localStoragePath}`);
+echo(JSON.stringify(argv))
 
 saveData();
 
@@ -27,7 +25,7 @@ async function saveData() {
   );
 
   music.timestamp = Date.now()
-  
+
   fs.writeFile(
     `${localStoragePath}/music.json`,
     JSON.stringify(music),

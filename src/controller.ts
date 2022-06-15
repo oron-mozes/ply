@@ -28,7 +28,8 @@ const argv = hideBin(process.argv);
 if (!argv.length) {
   echo('Please enter a command')
 } else {
-  const executionCommand = argv.join(" ");
+  
+  const executionCommand = argv.filter(arg => !['-p', '--play', '-play'].includes(arg)).join(" ");
   const executionProcess = exec(executionCommand, { async: true })
 
   // echo(JSON.stringify(argv))

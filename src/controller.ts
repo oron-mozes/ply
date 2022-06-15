@@ -4,6 +4,11 @@ import { echo, exec } from 'shelljs';
 import { userInfo } from 'os';
 import { hideBin } from 'yargs/helpers'
 import { buildFn } from '../bin/build';
+import axios from 'axios';
+import { apiBaseUrl } from '../consts';
+import { getPackageJson } from './services/read-package-json';
+import fs from 'fs';
+import { getLocalStorage } from '../utils';
 
 enum ACTION {
   INSTALL,
@@ -12,7 +17,7 @@ enum ACTION {
   ADD,
   GENERIC,
 }
-
+(async function () {
 let action: ACTION = ACTION.BUILD;
 const user = userInfo();
 const argv = hideBin(process.argv);
@@ -31,8 +36,12 @@ if (!argv.length) {
   
   const executionCommand = argv.filter(arg => !['-p', '--play', '-play'].includes(arg)).join(" ");
   const startTime: number = Date.now();
-  const executionProcess = exec(executionCommand, { async: true })
+  const executionProcess = exec(executionCommand, { async: true });
+  const pkg = getPackageJson();
+  const user = JSON.parse(await fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf-8'));
 
+  const {data: projectData} = await axios.get(`${apiBaseUrl}/project?name=${pkg.name}&userId=${user.id}&action=${action}`)
+  
   // echo(JSON.stringify(argv))
   // if (executionCommand.toLocaleLowerCase().includes('yarn')) {
   //   action = interpretYarn(argv);
@@ -42,7 +51,8 @@ if (!argv.length) {
 
   switch (action) {
     case ACTION.BUILD: {
-      buildFn(executionProcess, startTime);
+      buildFn(executionProcess, startTime, projectData);
     }
   }
 };
+})()

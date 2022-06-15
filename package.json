@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "release": "npm publish --access public",
-    "postinstall": "tsc && node ./dist/postinstall.js"
+    "postinstall": "tsc && chmod a+x dist/src/controller.js && node ./dist/postinstall.js"
   },
   "bin": {
     "ply": "./dist/src/controller.js"

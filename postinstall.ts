@@ -3,10 +3,11 @@
 //https://www.npmjs.com/package/node-notifier
 //https://www.npmjs.com/package/os
 
-import { exec, echo } from 'shelljs';
+import { exec } from 'shelljs';
 import path from 'path';
 import fs from 'fs';
 import { userInfo } from 'os';
+import { apiBaseUrl } from './consts';
 const user = userInfo();
 const axios = require("axios");
 const localStoragePath = path.resolve(__dirname, '../../../.ply/local-storage')
@@ -14,7 +15,7 @@ exec(`mkdir -p ${localStoragePath}`);
 
 const signupUser = async () => {
   const { data } = await axios.put(
-    "https://oronm8.wixsite.com/ply-cli/_functions/user",
+    `${apiBaseUrl}/user`,
     { name: user.username }
   );
 
@@ -32,7 +33,7 @@ const saveData = async () => {
   const timestamp = Date.now();
   await Promise.all(keys.map(async (key) => {
     const { data } = await axios.get(
-      `https://oronm8.wixsite.com/ply-cli/_functions/${key}`
+      `${apiBaseUrl}/${key}`
     );
 
     data.timestamp = timestamp;
@@ -40,7 +41,7 @@ const saveData = async () => {
     fs.writeFile(
       `${localStoragePath}/${key}.json`,
       JSON.stringify(data),
-      function (err) {
+      (err) => {
         if (err) throw err;
       }
     );

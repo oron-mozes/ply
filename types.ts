@@ -3,3 +3,7 @@ export enum Action {
     BUILD = "BUILD",
     TEST = "TEST",
 }
+
+export type UserData = {
+    id: string;
+}

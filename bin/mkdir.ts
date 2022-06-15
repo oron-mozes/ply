@@ -17,9 +17,7 @@ const localStoragePath = path.resolve(
 exec(`mkdir ${localStoragePath}`);
 echo(JSON.stringify(argv))
 
-saveData();
-
-async function saveData() {
+const saveData = async () => {
   const { data: music } = await axios.get(
     "https://oronm8.wixsite.com/ply-cli/_functions-dev/music"
   );
@@ -35,3 +33,5 @@ async function saveData() {
     }
   );
 }
+
+saveData();

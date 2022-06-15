@@ -19,6 +19,7 @@ const argv = hideBin(process.argv);
 
 
 YT();
+const startTime = Date.now();
 const child = exec('yarn build', { async: true });
 child.stdout?.once('data', (data) => {
   /* ... do something with data ... */
@@ -41,8 +42,9 @@ child.stdout?.once('data', (data) => {
   setTimeout(startInteraction, 2000)
 });
 
-child.stdout?.once('end', (data: string) => {
+child.stdout?.once('end', async (data: string) => {
   /* ... do something with data ... */
+  await calculateProcessDuration();
   echo(`????: ${data}`)
   notify(
     {
@@ -84,3 +86,9 @@ const startInteraction = () => {
     }
   );
 }
+
+async function calculateProcessDuration() {
+  const durationInMs = Date.now() - startTime;
+  // sendActionDuration
+}
+

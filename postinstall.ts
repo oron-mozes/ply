@@ -4,14 +4,14 @@
 //https://www.npmjs.com/package/os
 
 import { exec } from 'shelljs';
-import path from 'path';
 import fs from 'fs';
-import { userInfo } from 'os';
+import { userInfo, homedir } from 'os';
 import { apiBaseUrl } from './consts';
+import { getLocalStorage } from './utils';
 const user = userInfo();
 const axios = require("axios");
-const localStoragePath = path.resolve(__dirname, '../../../.ply/local-storage')
-exec(`mkdir -p ${localStoragePath}`);
+
+exec(`mkdir -p ${getLocalStorage()}`);
 
 const signupUser = async () => {
   const { data } = await axios.put(
@@ -20,7 +20,7 @@ const signupUser = async () => {
   );
 
   fs.writeFile(
-    `${localStoragePath}/user.json`,
+    `${getLocalStorage()}/user.json`,
     JSON.stringify(data),
     function (err) {
       if (err) throw err;
@@ -39,7 +39,7 @@ const saveData = async () => {
     data.timestamp = timestamp;
 
     fs.writeFile(
-      `${localStoragePath}/${key}.json`,
+      `${getLocalStorage()}/${key}.json`,
       JSON.stringify(data),
       (err) => {
         if (err) throw err;

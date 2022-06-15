@@ -4,6 +4,9 @@ import path from 'path';
 import { apiBaseUrl } from './consts';
 import { getPackageJson } from './src/services/read-package-json';
 import { Action, UserData } from './types';
+import { homedir } from 'os';
+
+export const getLocalStorage = () => `${homedir()}/.ply/local-storage`;
 
 export async function reportProcessDuration(startTime: number, action: Action) {
   const localStoragePath = path.resolve(__dirname, '../../../.ply/local-storage')

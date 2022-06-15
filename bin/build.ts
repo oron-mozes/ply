@@ -8,18 +8,21 @@ import { notify } from 'node-notifier';
 import { userInfo } from 'os';
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs';
+
 import YT from '../Features/YT';
+
+import { getPackageJson } from './services/read-package-json';
+
 
 const user = userInfo();
 const argv = hideBin(process.argv);
-echo(JSON.stringify(argv))
 
 
 YT();
 const child = exec('yarn build', { async: true });
 child.stdout?.once('data', (data) => {
   /* ... do something with data ... */
-
+  echo('### package json : ', JSON.stringify(getPackageJson()))
   echo(`!!!!!!!${data}`)
   notify(
     {

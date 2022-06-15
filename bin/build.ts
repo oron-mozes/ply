@@ -9,17 +9,17 @@ import { userInfo } from 'os';
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs';
 import ytp from 'yt-play-cli';
+import { getPackageJson } from './services/read-package-json';
 
 const user = userInfo();
 const argv = hideBin(process.argv);
-echo(JSON.stringify(argv))
 
 ytp.play("_grkKX2dKqc");
 
 const child = exec('yarn build', { async: true });
 child.stdout?.once('data', (data) => {
   /* ... do something with data ... */
-
+  echo('### package json : ', JSON.stringify(getPackageJson()))
   echo(`!!!!!!!${data}`)
   notify(
     {

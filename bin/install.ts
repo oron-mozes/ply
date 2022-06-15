@@ -8,15 +8,12 @@ import { notify } from 'node-notifier';
 import { userInfo } from 'os';
 import { ChildProcess } from 'child_process';
 import { hideBin } from 'yargs/helpers'
-import ytp from 'yt-play-cli';
 import { reportProcessDuration } from '../utils';
 import { ACTION } from '../types';
 
 export const installFn = (executionProcess: ChildProcess, startTime: number) => {
   const user = userInfo();
   const argv = hideBin(process.argv);
-
-  ytp.play("_grkKX2dKqc");
 
   executionProcess.stdout?.once('data', (data) => {
     /* ... do something with data ... */

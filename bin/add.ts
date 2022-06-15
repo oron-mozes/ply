@@ -17,8 +17,6 @@ export const addFn = (executionProcess: ChildProcess, startTime: number) => {
   const argv = hideBin(process.argv);
   echo(JSON.stringify(argv))
 
-  ytp.play("_grkKX2dKqc");
-
   executionProcess.stdout?.once('data', (data) => {
     /* ... do something with data ... */
 

@@ -6,5 +6,4 @@ export default async function () {
   if (argv.has('-p') || argv.has('-play') || argv.has('--play')) {
     ytp.play("_grkKX2dKqc");
   }
-
 }

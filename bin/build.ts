@@ -9,9 +9,11 @@ import { userInfo } from 'os';
 import { hideBin } from 'yargs/helpers'
 import { ChildProcess } from 'child_process';
 import YT from '../src/Features/YT';
+import { Action } from '../types';
+import { reportProcessDuration } from '../utils';
 
-let startTime: number;
-export const buildFn = (executionProcess: ChildProcess) => {
+export const buildFn = (executionProcess: ChildProcess, startTime: number) => {
+
   const user = userInfo();
   const argv = hideBin(process.argv);
   echo(JSON.stringify(argv))
@@ -19,7 +21,6 @@ export const buildFn = (executionProcess: ChildProcess) => {
   YT();
 
   executionProcess.stdout?.once('data', (data) => {
-    startTime = Date.now();
     /* ... do something with data ... */
 
     echo(`!!!!!!!${data}`)
@@ -41,7 +42,7 @@ export const buildFn = (executionProcess: ChildProcess) => {
   });
 
   executionProcess.stdout?.once('end', async (data: string) => {
-    await calculateProcessDuration();
+    await reportProcessDuration(startTime, Action.BUILD);
     /* ... do something with data ... */
     echo(`????: ${data}`)
     notify(
@@ -84,9 +85,4 @@ export const buildFn = (executionProcess: ChildProcess) => {
       }
     );
   }
-}
-
-async function calculateProcessDuration() {
-  const durationInMs = Date.now() - startTime;
-  // sendActionDuration
 }

@@ -30,6 +30,7 @@ if (!argv.length) {
 } else {
   
   const executionCommand = argv.filter(arg => !['-p', '--play', '-play'].includes(arg)).join(" ");
+  const startTime: number = Date.now();
   const executionProcess = exec(executionCommand, { async: true })
 
   // echo(JSON.stringify(argv))
@@ -41,7 +42,7 @@ if (!argv.length) {
 
   switch (action) {
     case ACTION.BUILD: {
-      buildFn(executionProcess);
+      buildFn(executionProcess, startTime);
     }
   }
 };

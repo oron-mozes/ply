@@ -3,15 +3,14 @@ import fs from 'fs';
 import path from 'path';
 import { apiBaseUrl } from './consts';
 import { getPackageJson } from './src/services/read-package-json';
-import { Action, UserData } from './types';
+import { ACTION, UserData } from './types';
 import { homedir } from 'os';
 
-export const getLocalStorage = () => `${homedir()}/.ply/local-storage`;
+export const getLocalStorage = (): string => `${homedir()}/.ply/local-storage`;
 
-export async function reportProcessDuration(startTime: number, action: Action) {
-  const localStoragePath = path.resolve(__dirname, '../../../.ply/local-storage')
+export async function reportProcessDuration(startTime: number, action: ACTION | string) {
   const durationInMs = Date.now() - startTime;
-  const userData: UserData = JSON.parse(fs.readFileSync(`${localStoragePath}/user.json`, 'utf8'))
+  const userData: UserData = JSON.parse(fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf8'))
   const packageJson = getPackageJson();
 
   const { data } = await axios.post(`${apiBaseUrl}/project`,

@@ -5,7 +5,7 @@
 
 import { exec } from 'shelljs';
 import fs from 'fs';
-import { userInfo, homedir } from 'os';
+import { userInfo } from 'os';
 import { apiBaseUrl } from './consts';
 import { getLocalStorage } from './utils';
 const user = userInfo();

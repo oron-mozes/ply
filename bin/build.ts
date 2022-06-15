@@ -9,7 +9,7 @@ import { userInfo } from 'os';
 import { hideBin } from 'yargs/helpers'
 import { ChildProcess } from 'child_process';
 import YT from '../src/Features/YT';
-import { Action } from '../types';
+import { ACTION } from '../types';
 import { reportProcessDuration } from '../utils';
 
 export const buildFn = (executionProcess: ChildProcess, startTime: number, projectData: {name: string, averageDuration:number | null, personalDuration:number | null}) => {
@@ -42,7 +42,7 @@ export const buildFn = (executionProcess: ChildProcess, startTime: number, proje
   });
 
   executionProcess.stdout?.once('end', async (data: string) => {
-    await reportProcessDuration(startTime, Action.BUILD);
+    await reportProcessDuration(startTime, ACTION.BUILD);
     /* ... do something with data ... */
     echo(`????: ${data}`)
     notify(

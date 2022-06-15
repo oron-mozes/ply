@@ -3,92 +3,90 @@
 //https://www.npmjs.com/package/node-notifier
 //https://www.npmjs.com/package/os
 
-import { exec, echo, exit } from 'shelljs';
+import { echo, exit } from 'shelljs';
 import { notify } from 'node-notifier';
 import { userInfo } from 'os';
 import { hideBin } from 'yargs/helpers'
-import yargs from 'yargs';
-
+import { ChildProcess } from 'child_process';
 import YT from '../Features/YT';
 
-import { getPackageJson } from './services/read-package-json';
+let startTime: number;
+export const buildFn = (executionProcess: ChildProcess) => {
+  const user = userInfo();
+  const argv = hideBin(process.argv);
+  echo(JSON.stringify(argv))
 
+  YT();
 
-const user = userInfo();
-const argv = hideBin(process.argv);
+  executionProcess.stdout?.once('data', (data) => {
+    startTime = Date.now();
+    /* ... do something with data ... */
 
+    echo(`!!!!!!!${data}`)
+    notify(
+      {
+        title: 'Update node package version',
+        subtitle: `Welcome, ${user.username}!  `,
+        message: `Yarn is on the go with ${argv.includes('play') ? 'Trivia' : 'No action'}`,
 
-YT();
-const startTime = Date.now();
-const child = exec('yarn build', { async: true });
-child.stdout?.once('data', (data) => {
-  /* ... do something with data ... */
-  echo('### package json : ', JSON.stringify(getPackageJson()))
-  echo(`!!!!!!!${data}`)
-  notify(
-    {
-      title: 'Update node package version',
-      subtitle: `Welcome, ${user.username}!  `,
-      message: `Yarn is on the go with ${argv.includes('play') ? 'Trivia' : 'No action'}`,
+        sound: true, // Only Notification Center or Windows Toasters
+        wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
+      },
+      (err, response, metadata) => {
+        const streing = -"dadsa"
 
-      sound: true, // Only Notification Center or Windows Toasters
-      wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
-    },
-    (err, response, metadata) => {
-      const streing = -"dadsa"
+      }
+    );
+    setTimeout(startInteraction, 2000)
+  });
 
-    }
-  );
-  setTimeout(startInteraction, 2000)
-});
+  executionProcess.stdout?.once('end', async (data: string) => {
+    await calculateProcessDuration();
+    /* ... do something with data ... */
+    echo(`????: ${data}`)
+    notify(
+      {
+        title: 'Done',
+        message: 'Go back to work',
 
-child.stdout?.once('end', async (data: string) => {
-  /* ... do something with data ... */
-  await calculateProcessDuration();
-  echo(`????: ${data}`)
-  notify(
-    {
-      title: 'Done',
-      message: 'Go back to work',
+        sound: true, // Only Notification Center or Windows Toasters
+        wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
+      },
+      (err, response, metadata) => {
 
-      sound: true, // Only Notification Center or Windows Toasters
-      wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
-    },
-    (err, response, metadata) => {
+      }
+    );
+    exit(1);
+  });
 
-    }
-  );
-  exit(1);
-});
+  const startInteraction = () => {
+    notify(
+      {
+        title: 'Fun time',
+        message: 'Lets play',
 
-const startInteraction = () => {
-  notify(
-    {
-      title: 'Fun time',
-      message: 'Lets play',
+        sound: true, // Only Notification Center or Windows Toasters
+        wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
+      },
+      (err, response, metadata) => {
+        setTimeout(() => notify(
+          {
+            title: 'Did You know',
+            message: 'Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option',
 
-      sound: true, // Only Notification Center or Windows Toasters
-      wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
-    },
-    (err, response, metadata) => {
-      setTimeout(() => notify(
-        {
-          title: 'Did You know',
-          message: 'Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option',
+            sound: true, // Only Notification Center or Windows Toasters
+            wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
+          },
+          (err, response, metadata) => {
 
-          sound: true, // Only Notification Center or Windows Toasters
-          wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
-        },
-        (err, response, metadata) => {
-
-        }
-      ), 2000);
-    }
-  );
+          }
+        ), 2000);
+      }
+    );
+  }
 }
 
 async function calculateProcessDuration() {
   const durationInMs = Date.now() - startTime;
   // sendActionDuration
 }
-

@@ -11,7 +11,8 @@
     "ply-build": "./bin/build.js",
     "ply-install": "./bin/install.js",
     "ply-add": "./bin/add.js",
-    "ply-test": "./bin/test.js"
+    "ply-test": "./bin/test.js",
+    "ply-mkdir": "./bin/mkdir.js"
   },
   "keywords": [
     "cli"
@@ -19,8 +20,10 @@
   "author": "Oron Mozes",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "node-notifier": "^10.0.1",
     "os": "^0.1.2",
+    "path": "^0.12.7",
     "shelljs": "^0.8.5",
     "yargs": "^17.5.1",
     "yt-play-cli": "^0.13.5"

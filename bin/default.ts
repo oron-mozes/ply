@@ -5,12 +5,9 @@
 
 import { exit } from 'shelljs';
 import { ChildProcess } from 'child_process';
-import YT from '../src/Features/YT';
-import { ACTION } from '../types';
 import { reportProcessDuration } from '../utils';
 
 export const defaultFn = (executionProcess: ChildProcess, startTime: number, executionCommand: string) => {
-  YT();
   executionProcess.stdout?.once('data', (data) => {
     /* ... do something with data ... */
   });

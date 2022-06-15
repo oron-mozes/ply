@@ -13,12 +13,8 @@ import { ACTION } from '../types';
 import { reportProcessDuration } from '../utils';
 
 export const buildFn = (executionProcess: ChildProcess, startTime: number, projectData: {name: string, averageDuration:number | null, personalDuration:number | null}) => {
-
   const user = userInfo();
   const argv = hideBin(process.argv);
-  echo(JSON.stringify(argv))
-
-  YT(projectData.personalDuration ?? 3);
 
   executionProcess.stdout?.once('data', (data) => {
     /* ... do something with data ... */

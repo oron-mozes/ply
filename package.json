@@ -9,7 +9,7 @@
     "postinstall": "tsc && node ./dist/postinstall.js"
   },
   "bin": {
-    "ply": "./dist/bin/controller.js"
+    "ply": "./dist/src/controller.js"
   },
   "keywords": [
     "cli"

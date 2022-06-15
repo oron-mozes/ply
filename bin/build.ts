@@ -8,7 +8,7 @@ import { notify } from 'node-notifier';
 import { userInfo } from 'os';
 import { hideBin } from 'yargs/helpers'
 import { ChildProcess } from 'child_process';
-import YT from '../Features/YT';
+import YT from '../src/Features/YT';
 
 let startTime: number;
 export const buildFn = (executionProcess: ChildProcess) => {

@@ -2,7 +2,7 @@
 //https://www.npmjs.com/package/shelljs
 //https://www.npmjs.com/package/node-notifier
 //https://www.npmjs.com/package/os
-const {exec, echo, } = require('shelljs');
+const {exec, echo, exit} = require('shelljs');
 const {notify} = require('node-notifier');
 const user = require("os").userInfo();
 const yargs = require("yargs");
@@ -65,6 +65,7 @@ child.stdout.once('end', function(data) {
      
     }
   );
+  exit(1);
 });
 
 function startInteraction () {

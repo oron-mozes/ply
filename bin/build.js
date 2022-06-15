@@ -29,7 +29,6 @@ echo(JSON.stringify(argv))
 
 ytp.play("Wkof3nPK--Y");
 
-exec('snake', {async:true});
 var child = exec('yarn build', {async:true});
 child.stdout.once('data', function(data) {
   /* ... do something with data ... */
@@ -37,7 +36,7 @@ child.stdout.once('data', function(data) {
   echo(`!!!!!!!${data}`)
   notify(
     {
-      title: 'Test title',
+      title: 'Update node package version',
       subtitle: `Welcome, ${user.username}!  `,
       message: `Yarn is on the go with ${argv.includes('play') ? 'Trivia' : 'No action'}`,
      

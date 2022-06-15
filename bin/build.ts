@@ -8,14 +8,14 @@ import { notify } from 'node-notifier';
 import { userInfo } from 'os';
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs';
-import ytp from 'yt-play-cli';
+import YT from '../Features/YT';
 
 const user = userInfo();
 const argv = hideBin(process.argv);
 echo(JSON.stringify(argv))
 
-ytp.play("_grkKX2dKqc");
 
+YT();
 const child = exec('yarn build', { async: true });
 child.stdout?.once('data', (data) => {
   /* ... do something with data ... */

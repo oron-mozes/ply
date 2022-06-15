@@ -4,9 +4,10 @@
   "description": "\"Ply-cli\" is a cli tool that aim to entertain you while you wait for any process to be over.",
   "main": "index.js",
   "scripts": {
+    "compile": "tsc",
     "release": "npm publish --access public",
-    "postinstall": "node ./dist/postinstall.js",
-    "build": "tsc"
+    "preinstall": "compile",
+    "postinstall": "node ./dist/postinstall.js"
   },
   "bin": {
     "ply-build": "./dist/bin/build.js",

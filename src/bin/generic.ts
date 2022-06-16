@@ -5,7 +5,7 @@
 
 import { ChildProcess } from 'child_process';
 import { exit } from 'shelljs';
-import { reportErrors, reportProcessDuration } from '../../utils';
+import { reportErrors, reportProcessDuration, shouldReportError } from '../../utils';
 import { closeTerminalIfNeeded } from '../Features/trivia';
 
 export const genericFn = async ({ executionProcess, startTime, executionCommand }:
@@ -17,9 +17,7 @@ export const genericFn = async ({ executionProcess, startTime, executionCommand 
 
   let errors: string[] = [];
   executionProcess?.stderr?.on('data', (error) => {
-    const filters = ['error', 'failed']; //TODO: find a better filters
-    const shouldReportError = filters.some(filter => error?.toLowerCase()?.includes?.(filter));
-    if (shouldReportError) {
+    if (shouldReportError(error)) {
       errors.push(error);
     }
   })

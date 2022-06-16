@@ -4,7 +4,7 @@
 //https://www.npmjs.com/package/os
 
 import { ChildProcess } from 'child_process';
-import { reportErrors, reportProcessDuration } from '../../utils';
+import { reportErrors, reportProcessDuration, shouldReportError } from '../../utils';
 import { ACTION } from '../../types';
 import { exit } from 'shelljs';
 import { closeTerminalIfNeeded } from '../Features/trivia';
@@ -16,9 +16,7 @@ export const addFn = async ({ executionProcess, startTime }:
   }) => {
   let errors: string[] = [];
   executionProcess?.stderr?.on('data', (error) => {
-    const filters = ['error', 'failed']; //TODO: find a better filters
-    const shouldReportError = filters.some(filter => error?.toLowerCase()?.includes?.(filter));
-    if (shouldReportError) {
+    if (shouldReportError(error)) {
       errors.push(error);
     }
   })

@@ -11,7 +11,7 @@ export const genericFn = async (executionProcess: ChildProcess, startTime: numbe
 
   let errors: string[] = [];
   executionProcess?.stderr?.on('data', async (error) => {
-    const shouldReportError = error?.includes?.('Error');
+    const shouldReportError = error?.includes?.('Error'); //TODO: find a better filter
     if (shouldReportError) {
       errors.push(error);
     }

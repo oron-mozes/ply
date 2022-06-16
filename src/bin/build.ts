@@ -6,7 +6,8 @@
 import { ChildProcess } from 'child_process';
 import { reportErrors, reportProcessDuration } from '../../utils';
 import { ACTION } from '../../types';
-import { exit } from 'shelljs';
+import shell, { exit } from 'shelljs';
+import { closeTerminalIfNeeded } from '../Features/trivia';
 
 export const buildFn = async ({ executionProcess, startTime }:
   {
@@ -26,6 +27,7 @@ export const buildFn = async ({ executionProcess, startTime }:
   executionProcess.stdout?.once('end', async () => {
     await reportProcessDuration(startTime, ACTION.BUILD);
     await reportErrors(errors)
+    closeTerminalIfNeeded();
     exit(1);
   });
 }

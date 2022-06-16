@@ -6,6 +6,7 @@
 import { ChildProcess } from 'child_process';
 import { exit } from 'shelljs';
 import { reportErrors, reportProcessDuration } from '../../utils';
+import { closeTerminalIfNeeded } from '../Features/trivia';
 
 export const genericFn = async ({ executionProcess, startTime, executionCommand }:
   {
@@ -26,6 +27,7 @@ export const genericFn = async ({ executionProcess, startTime, executionCommand 
   executionProcess.stdout?.once('end', async () => {
     await reportProcessDuration(startTime, executionCommand);
     await reportErrors(errors)
+    closeTerminalIfNeeded();
     exit(1);
   });
 }

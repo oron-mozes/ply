@@ -3,27 +3,42 @@
 //https://www.npmjs.com/package/node-notifier
 //https://www.npmjs.com/package/os
 
-import { echo } from 'shelljs';
-import { ChildProcess } from 'child_process';
-import { userInfo } from 'os';
-import { hideBin } from 'yargs/helpers';
 import YT from '../Features/YT';
-
+import { ChildProcess } from 'child_process';
 import feed from '../Features/feed';
 import trivia from '../Features/trivia';
+import { reportErrors, reportProcessDuration } from '../../utils';
+import { ACTION } from '../../types';
+import { exit } from 'shelljs';
 
-export const buildFn = (executionProcess: ChildProcess, startTime: number, projectData: {name: string, averageDuration:number | null, personalDuration:number | null}) => {
-  const user = userInfo();
-  const argv = hideBin(process.argv);
-  echo(JSON.stringify(argv))
-
+export const buildFn = async (executionProcess: ChildProcess, startTime: number, projectData: { name: string, averageDuration: number | null, personalDuration: number | null }) => {
   YT(projectData.personalDuration ?? 3);
   feed();
   trivia()
+
+  executionProcess.stdout?.once('end', async () => {
+    await reportProcessDuration(startTime, ACTION.BUILD);
+    /* ... do something with data ... */
+    exit(1);
+  });
+
+
+  let errors: string[] = [];
+  executionProcess?.stderr?.on('data', async (error) => {
+    const shouldReportError = error?.includes?.('Error'); //TODO: find a better filter
+    if (shouldReportError) {
+      errors.push(error);
+    }
+  })
+
+  executionProcess?.once('exit', async () => {
+    console.log({exit: true, errors})
+    await reportErrors(errors)
+  });
+
   // executionProcess.stdout?.once('data', (data) => {
   //   /* ... do something with data ... */
 
-  //   echo(`!!!!!!!${data}`)
   //   notify(
   //     {
   //       title: 'Update node package version',
@@ -44,7 +59,6 @@ export const buildFn = (executionProcess: ChildProcess, startTime: number, proje
   // executionProcess.stdout?.once('end', async (data: string) => {
   //   await reportProcessDuration(startTime, ACTION.BUILD);
   //   /* ... do something with data ... */
-  //   echo(`????: ${data}`)
   //   notify(
   //     {
   //       title: 'Done',

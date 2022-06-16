@@ -12,8 +12,8 @@ import { installFn } from './bin/install';
 import { ACTION, PACKAGE_MANAGER, ProjectData } from '../types';
 import { testFn } from './bin/test';
 import { addFn } from './bin/add';
-import { defaultFn } from './bin/default';
 import YT from './Features/YT';
+import { genericFn } from './bin/generic';
 
 (async function () {
 
@@ -141,7 +141,7 @@ import YT from './Features/YT';
         break;
 
       case ACTION.GENERIC:
-        defaultFn(executionProcess, startTime, executionCommand)
+        genericFn(executionProcess, startTime, executionCommand)
         break;
     }
   };

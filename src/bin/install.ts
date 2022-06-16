@@ -23,9 +23,9 @@ export const installFn = async ({ executionProcess, startTime }:
     }
   })
 
-  executionProcess.stdout?.once('end', () => {
-    reportProcessDuration(startTime, ACTION.INSTALL);
-    reportErrors(errors)
+  executionProcess.stdout?.once('end', async () => {
+    await reportProcessDuration(startTime, ACTION.INSTALL);
+    await reportErrors(errors)
     exit(1);
   });
 }

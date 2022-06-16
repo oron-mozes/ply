@@ -25,8 +25,6 @@ export async function reportProcessDuration(startTime: number, action: ACTION | 
   );
 
   console.log({ reportDurationResult: data })
-
-  exit(1);
 }
 
 

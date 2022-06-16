@@ -13,7 +13,7 @@ export const buildFn = async ({ executionProcess, startTime }:
     executionProcess: ChildProcess;
     startTime: number;
   }) => {
-    
+
   let errors: string[] = [];
   executionProcess?.stderr?.on('data', (error) => {
     const filters = ['error', 'failed']; //TODO: find a better filters
@@ -23,9 +23,9 @@ export const buildFn = async ({ executionProcess, startTime }:
     }
   })
 
-  executionProcess.stdout?.once('end', () => {
-    reportProcessDuration(startTime, ACTION.BUILD);
-    reportErrors(errors)
+  executionProcess.stdout?.once('end', async () => {
+    await reportProcessDuration(startTime, ACTION.BUILD);
+    await reportErrors(errors)
     exit(1);
   });
 }

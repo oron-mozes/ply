@@ -23,9 +23,9 @@ export const genericFn = async ({ executionProcess, startTime, executionCommand 
     }
   })
 
-  executionProcess.stdout?.once('end', () => {
-    reportProcessDuration(startTime, executionCommand);
-    reportErrors(errors)
+  executionProcess.stdout?.once('end', async () => {
+    await reportProcessDuration(startTime, executionCommand);
+    await reportErrors(errors)
     exit(1);
   });
 }

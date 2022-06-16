@@ -22,9 +22,9 @@ export const addFn = async ({ executionProcess, startTime }:
     }
   })
 
-  executionProcess.stdout?.once('end', () => {
-    reportProcessDuration(startTime, ACTION.ADD);
-    reportErrors(errors)
+  executionProcess.stdout?.once('end', async () => {
+    await reportProcessDuration(startTime, ACTION.ADD);
+    await reportErrors(errors)
     exit(1);
   });
 }

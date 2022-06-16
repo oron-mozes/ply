@@ -11,55 +11,54 @@ import { getLocalStorage } from './utils';
 import readline from 'readline';
 
 const user = userInfo();
-const axios = require("axios");
+const axios = require('axios');
 
 exec(`mkdir -p ${getLocalStorage()}`);
 
 const signupUser = async () => {
-  var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  
-  rl.question("What is your email? ", async function(answer) {
-    console.log("Thank you for registering for our ply cli:", answer);
-    const { data } = await axios.put(
-      `${apiBaseUrl}/user`,
-      { name: user.username, email: answer.trim() }
-    );
-  
-    fs.writeFile(
-      `${getLocalStorage()}/user.json`,
-      JSON.stringify(data),
-      function (err) {
-        if (err) throw err;
-      }
-    );
-    rl.close();
-  });
-  
-}
+  if (!fs.existsSync(`${getLocalStorage()}/user.json`)) {
+    var rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    rl.question('What is your email? ', async function (answer) {
+      console.log('Thank you for registering for our ply cli:', answer);
+      const { data } = await axios.put(`${apiBaseUrl}/user`, {
+        name: user.username,
+        email: answer.trim(),
+      });
+
+      fs.writeFile(
+        `${getLocalStorage()}/user.json`,
+        JSON.stringify(data),
+        function (err) {
+          if (err) throw err;
+        }
+      );
+      rl.close();
+    });
+  }
+};
 
 const saveData = async () => {
-  const keys = ["music", "feed"];
+  const keys = ['music', 'feed'];
   const timestamp = Date.now();
-  await Promise.all(keys.map(async (key) => {
-    const { data } = await axios.get(
-      `${apiBaseUrl}/${key}`
-    );
+  await Promise.all(
+    keys.map(async (key) => {
+      const { data } = await axios.get(`${apiBaseUrl}/${key}`);
 
-    data.timestamp = timestamp;
+      data.timestamp = timestamp;
 
-    fs.writeFile(
-      `${getLocalStorage()}/${key}.json`,
-      JSON.stringify(data),
-      (err) => {
-        if (err) throw err;
-      }
-    );
-  }));
-}
-
+      fs.writeFile(
+        `${getLocalStorage()}/${key}.json`,
+        JSON.stringify(data),
+        (err) => {
+          if (err) throw err;
+        }
+      );
+    })
+  );
+};
 
 signupUser();
 saveData();

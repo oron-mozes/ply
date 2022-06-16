@@ -1,5 +1,5 @@
 import { hideBin } from 'yargs/helpers';
-import {exec} from 'shelljs';
+import shell, { echo } from 'shelljs';
 import path from 'path';
 
 export default async function () {
@@ -7,7 +7,10 @@ export default async function () {
 
   if ( argv.has('--p-game')) {
     const pathToGame = path.resolve(__dirname, 'game.js');
-    const child = await exec(`open -a iTerm . ${pathToGame}`);
-    
+    shell.exec(`open -a iTerm  ${pathToGame}`);
+    setTimeout(() => {
+      shell.echo('In game')
+      shell.exec('osascript -e \'tell application "iTerm" to tell current window to close current tab\' & exit');
+    }, 5000);
   }
 }

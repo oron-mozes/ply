@@ -4,7 +4,6 @@ import { apiBaseUrl } from './consts';
 import { getPackageJson } from './src/services/read-package-json';
 import { ACTION, UserData } from './types';
 import { homedir } from 'os';
-import { ChildProcess } from 'child_process';
 import { exit } from 'shelljs';
 
 export const getLocalStorage = (): string => `${homedir()}/.ply/local-storage`;
@@ -34,16 +33,13 @@ export async function reportProcessDuration(startTime: number, action: ACTION | 
 export async function reportErrors(errors: string[]) {
   const userData = getUserData();
   const packageJson = getPackageJson();
-  const reportErrorsResult = await Promise.all(errors.map(async (err) => {
-    const { data } = await axios.put(`${apiBaseUrl}/error`,
-      {
-        message: err,
-        userId: userData.id,
-        name: packageJson.name
-      });
 
-    return data;
-  }));
+  const { data: reportErrorsResult } = await axios.put(`${apiBaseUrl}/error`,
+    {
+      bulk: errors,
+      userId: userData.id,
+      name: packageJson.name
+    });
 
   console.log({ reportErrorsResult })
 }

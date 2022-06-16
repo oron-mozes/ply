@@ -14,10 +14,10 @@ import { testFn } from './bin/test';
 import { addFn } from './bin/add';
 import YT from './Features/YT';
 import { genericFn } from './bin/generic';
+import feed from './Features/feed';
+import trivia from './Features/trivia';
 
 (async function () {
-
-  let action: ACTION = ACTION.BUILD;
   const argv = hideBin(process.argv);
 
   const getYarnAction = (cmd: string[]): ACTION => {
@@ -118,30 +118,29 @@ import { genericFn } from './bin/generic';
 
     echo(JSON.stringify(argv))
 
-    if (['--p-play', '-p-play', '-p-p'].some(flag => internalFlags.includes(flag))) {
-      echo('DOR ANI KAN')
-      projectData.personalDuration ? YT(projectData.personalDuration) : YT();
-    }
+    YT(projectData.personalDuration ?? 3);
+    feed();
+    trivia()
 
     switch (action) {
       case ACTION.BUILD:
-        buildFn(executionProcess, startTime, projectData);
+        buildFn({ executionProcess, startTime });
         break;
 
       case ACTION.INSTALL:
-        installFn(executionProcess, startTime);
+        installFn({ executionProcess, startTime });
         break;
 
       case ACTION.TEST:
-        testFn(executionProcess, startTime);
+        testFn({ executionProcess, startTime });
         break;
 
       case ACTION.ADD:
-        addFn(executionProcess, startTime);
+        addFn({ executionProcess, startTime });
         break;
 
       case ACTION.GENERIC:
-        genericFn(executionProcess, startTime, executionCommand)
+        genericFn({ executionProcess, startTime, executionCommand })
         break;
     }
   };

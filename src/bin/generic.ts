@@ -5,9 +5,23 @@
 
 import { ChildProcess } from 'child_process';
 import { exit } from 'shelljs';
-import { reportProcessDuration } from '../../utils';
+import { reportErrors, reportProcessDuration } from '../../utils';
 
 export const genericFn = async (executionProcess: ChildProcess, startTime: number, executionCommand: string) => {
+
+  let errors: string[] = [];
+  executionProcess?.stderr?.on('data', async (error) => {
+    const shouldReportError = error?.includes?.('Error');
+    if (shouldReportError) {
+      errors.push(error);
+    }
+  })
+
+  executionProcess?.once('exit', async () => {
+    console.log({exit: true, errors})
+    await reportErrors(errors)
+  });
+
   executionProcess.stdout?.once('end', async () => {
     await reportProcessDuration(startTime, executionCommand);
     /* ... do something with data ... */

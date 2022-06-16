@@ -4,12 +4,25 @@
 //https://www.npmjs.com/package/os
 
 import { ChildProcess } from 'child_process';
-import { reportProcessDuration } from '../../utils';
+import { reportErrors, reportProcessDuration } from '../../utils';
 import { ACTION } from '../../types';
 import { exit } from 'shelljs';
 
 export const installFn = (executionProcess: ChildProcess, startTime: number) => {
   
+  let errors: string[] = [];
+  executionProcess?.stderr?.on('data', async (error) => {
+    const shouldReportError = error?.includes?.('Error');
+    if (shouldReportError) {
+      errors.push(error);
+    }
+  })
+
+  executionProcess?.once('exit', async () => {
+    console.log({exit: true, errors})
+    await reportErrors(errors)
+  });
+
   executionProcess.stdout?.once('end', async () => {
     await reportProcessDuration(startTime, ACTION.INSTALL);
     /* ... do something with data ... */

@@ -3,7 +3,7 @@
 //https://www.npmjs.com/package/node-notifier
 //https://www.npmjs.com/package/os
 
-import { exec } from 'shelljs';
+import { echo, exec } from 'shelljs';
 import fs from 'fs';
 import { userInfo } from 'os';
 import { apiBaseUrl } from './consts';
@@ -41,12 +41,11 @@ const signupUser = async () => {
 };
 
 const saveData = async () => {
-  const keys = ['music', 'feed'];
+  const keys = ['music', 'feed', 'trivia'];
   const timestamp = Date.now();
   await Promise.all(
     keys.map(async (key) => {
       const { data } = await axios.get(`${apiBaseUrl}/${key}`);
-
       data.timestamp = timestamp;
 
       fs.writeFile(

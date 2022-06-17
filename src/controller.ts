@@ -15,7 +15,9 @@ import { addFn } from './bin/add';
 import YT from './Features/YT';
 import { genericFn } from './bin/generic';
 import feed from './Features/feed';
-import trivia from './Features/trivia';
+import path from 'path';
+
+let isTerminalActive = false;
 
 (async function () {
   const argv = hideBin(process.argv);
@@ -120,7 +122,12 @@ import trivia from './Features/trivia';
 
     YT(projectData.personalDuration ?? 3);
     feed();
-    trivia()
+
+    if (internalFlags.includes("--p-game")) {
+      const pathToGame = path.resolve(__dirname, './Features/Game/index.js');
+      exec(`open -a Terminal ${pathToGame}`);
+      isTerminalActive = true;
+    }
 
     switch (action) {
       case ACTION.BUILD:
@@ -145,3 +152,10 @@ import trivia from './Features/trivia';
     }
   };
 })();
+
+export const closeTerminalIfNeeded = () => {
+  if (isTerminalActive) {
+    exec('osascript -e \'tell application "Terminal" to close first window\'');
+    isTerminalActive = false;
+  }
+}

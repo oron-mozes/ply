@@ -4,6 +4,8 @@ import { apiBaseUrl } from './consts';
 import { getPackageJson } from './src/services/read-package-json';
 import { ACTION, UserData } from './types';
 import { homedir } from 'os';
+import { closeTerminalIfNeeded } from './src/controller';
+import { exit } from 'shelljs';
 
 export const getLocalStorage = (): string => `${homedir()}/.ply/local-storage`;
 
@@ -54,10 +56,16 @@ export async function reportErrors(errors: string[]) {
   }
 }
 
-export const shouldReFecthData = (timesetmp:number, timeInHours = 1) => {
+export const shouldReFecthData = (timesetmp: number, timeInHours = 1) => {
   const currentTime = Date.now();
-  const totalTime = (Math.round((currentTime - timesetmp ) / 1000 ) / 60) / 60;
-  
-  return totalTime > timeInHours;
+  const totalTime = (Math.round((currentTime - timesetmp) / 1000) / 60) / 60;
 
+  return totalTime > timeInHours;
+}
+
+export const onProcessEnd = async (startTime: number, action: ACTION, errors: string[]) => {
+  await reportProcessDuration(startTime, action);
+  await reportErrors(errors)
+  closeTerminalIfNeeded()
+  exit(1);
 }

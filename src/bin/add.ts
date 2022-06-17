@@ -4,10 +4,8 @@
 //https://www.npmjs.com/package/os
 
 import { ChildProcess } from 'child_process';
-import { reportErrors, reportProcessDuration, shouldReportError } from '../../utils';
+import { onProcessEnd, shouldReportError } from '../../utils';
 import { ACTION } from '../../types';
-import { exit } from 'shelljs';
-import { closeTerminalIfNeeded } from '../Features/trivia';
 
 export const addFn = async ({ executionProcess, startTime }:
   {
@@ -22,9 +20,6 @@ export const addFn = async ({ executionProcess, startTime }:
   })
 
   executionProcess.stdout?.once('end', async () => {
-    await reportProcessDuration(startTime, ACTION.ADD);
-    await reportErrors(errors)
-    closeTerminalIfNeeded();
-    exit(1);
+    await onProcessEnd(startTime, ACTION.ADD, errors);
   });
 }

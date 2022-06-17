@@ -4,9 +4,8 @@
 //https://www.npmjs.com/package/os
 
 import { ChildProcess } from 'child_process';
-import { exit } from 'shelljs';
-import { reportErrors, reportProcessDuration, shouldReportError } from '../../utils';
-import { closeTerminalIfNeeded } from '../Features/trivia';
+import { ACTION } from '../../types';
+import { onProcessEnd, shouldReportError } from '../../utils';
 
 export const genericFn = async ({ executionProcess, startTime, executionCommand }:
   {
@@ -23,9 +22,6 @@ export const genericFn = async ({ executionProcess, startTime, executionCommand 
   })
 
   executionProcess.stdout?.once('end', async () => {
-    await reportProcessDuration(startTime, executionCommand);
-    await reportErrors(errors)
-    closeTerminalIfNeeded();
-    exit(1);
+    await onProcessEnd(startTime, ACTION.GENERIC, errors);
   });
 }

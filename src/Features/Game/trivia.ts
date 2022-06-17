@@ -4,11 +4,11 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 import gradient from "gradient-string";
 import chalkAnimation from "chalk-animation";
-import { createSpinner } from "nanospinner";
 import figlet from "figlet";
-import { echo, exec } from "shelljs";
 import fs from 'fs';
-import { getLocalStorage } from "../../utils";
+import { getLocalStorage } from "../../../utils";
+import { createSpinner } from "nanospinner";
+import { echo, exec } from "shelljs";
 
 type Question = {
   _id: string;
@@ -21,15 +21,13 @@ type Question = {
   additionalLink: string;
 };
 
-//A helper function to show the animation using a timeout
-//with a default of 4 seconds as JS does not allow a
-//Promise-based timeout
 const sleep = (ms = 1000) => new Promise((r) => setTimeout(r, ms));
 
-async function welcome() {
+const welcome = async () => {
   const title = chalkAnimation.neon(`
-        Who wants to be a ReactJS Millionaire? \n
+        Let's Play Some Trivia\n
     `);
+
   await sleep();
   title.stop();
 
@@ -43,18 +41,19 @@ async function welcome() {
     `);
 }
 
-async function handleAnswer(isCorrect: boolean, additionalInfo: string, additionalLink: string) {
+const handleAnswer = async (isCorrect: boolean, additionalInfo: string, additionalLink: string) => {
   const spinner = createSpinner("And the answer is....");
   const result = isCorrect ? "success" : "error";
   const text = isCorrect ? "That is CORRECT!" : `💀💀 WRONG 💀💀`;
+  const additionInfoMsg = additionalInfo ? `\n${chalk.blueBright("FYI")}\n\n${additionalInfo}` : '';
   const additionalLinkMsg = additionalLink ? `You can read more about it here: ${additionalLink}` : '';
 
   spinner[result]({ text });
-  echo(additionalInfo || '');
+  echo(additionInfoMsg);
   echo(additionalLinkMsg);
 }
 
-async function winningTitle() {
+const winningTitle = async () => {
   const msg = `WELL DONE`;
 
   figlet(msg, (_err, data) => {
@@ -71,13 +70,11 @@ const askQuestion = async (data: Question) => {
     type: "list",
   });
 
-  //answer = {"_id": "selected answer"}
-
   const isCorrect = options.findIndex(option => option === answer[_id]) === currectAnswer;
   return handleAnswer(isCorrect, additionalInfo, additionalLink);
 };
 
-const initTrivia = async () => {
+export const initTrivia = async () => {
   const { items: questionArray }: { items: Question[] } = JSON.parse(fs.readFileSync(`${getLocalStorage()}/trivia.json`, 'utf-8'))
 
   exec("clear");
@@ -88,5 +85,3 @@ const initTrivia = async () => {
   }
   await winningTitle();
 };
-
-initTrivia();

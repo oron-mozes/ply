@@ -6,34 +6,20 @@ import gradient from "gradient-string";
 import chalkAnimation from "chalk-animation";
 import { createSpinner } from "nanospinner";
 import figlet from "figlet";
-import { exec } from "shelljs";
+import { echo, exec } from "shelljs";
+import fs from 'fs';
+import { getLocalStorage } from "../../utils";
 
-// console.log(chalk.bgRed('hi mom'));
 type Question = {
-  name: string;
-  message: string;
-  choices: string[];
-  correctAnswer: string;
+  _id: string;
+  question: string;
+  options: string[];
+  currectAnswer: number;
+  successRate: number;
+  failureRate: number;
+  additionalInfo: string;
+  additionalLink: string;
 };
-const data: Question[] = [
-  {
-    name: "question_1",
-    message: "What is ReactJS? \n",
-    choices: [
-      "A JavaScript Framework",
-      "A JavaScript Library",
-      "verb: act in response to something; respond in a particular way",
-      "A Mark-up Language",
-    ],
-    correctAnswer: "A JavaScript Library",
-  },
-  {
-    name: "question_2",
-    message: "Who created React? \n",
-    choices: ["Twitter", "Tesla", "Meta", "Thomas Edison"],
-    correctAnswer: "Meta",
-  },
-];
 
 //A helper function to show the animation using a timeout
 //with a default of 4 seconds as JS does not allow a
@@ -51,23 +37,24 @@ async function welcome() {
                             ${chalk.blue("INSTRUCTIONS")}
         ==============================================================
         ${chalk.green(
-          "You need to get all answers correct"
-        )} to get to the final prize.
+    "You need to get all answers correct"
+  )} to get to the final prize.
         ${chalk.red("If you get any question wrong")}, you lose...
     `);
 }
 
-async function handleAnswer(isCorrect: boolean) {
+async function handleAnswer(isCorrect: boolean, additionalInfo: string, additionalLink: string) {
   const spinner = createSpinner("And the answer is....");
-  if (isCorrect) {
-    spinner.success({ text: `That is CORRECT!` });
-  } else {
-    spinner.error({ text: `💀💀 WRONG 💀💀` });
-  }
+  const result = isCorrect ? "success" : "error";
+  const text = isCorrect ? "That is CORRECT!" : `💀💀 WRONG 💀💀`;
+  const additionalLinkMsg = additionalLink ? `You can read more about it here: ${additionalLink}` : '';
+
+  spinner[result]({ text });
+  echo(additionalInfo || '');
+  echo(additionalLinkMsg);
 }
 
 async function winningTitle() {
-  console.clear();
   const msg = `WELL DONE`;
 
   figlet(msg, (_err, data) => {
@@ -75,19 +62,28 @@ async function winningTitle() {
   });
 }
 
-const askQuestion = async (question: Question) => {
+const askQuestion = async (data: Question) => {
+  const { _id, question, options, currectAnswer, additionalInfo, additionalLink } = data;
   const answer = await inquirer.prompt({
-    ...question,
+    name: _id,
+    message: question,
+    choices: options,
     type: "list",
   });
 
-  return handleAnswer(answer[question.name] == question.correctAnswer);
+  //answer = {"_id": "selected answer"}
+
+  const isCorrect = options.findIndex(option => option === answer[_id]) === currectAnswer;
+  return handleAnswer(isCorrect, additionalInfo, additionalLink);
 };
 
 const initTrivia = async () => {
+  const { items: questionArray }: { items: Question[] } = JSON.parse(fs.readFileSync(`${getLocalStorage()}/trivia.json`, 'utf-8'))
+
   exec("clear");
+
   await welcome();
-  for await (const question of data) {
+  for await (const question of questionArray) {
     await askQuestion(question);
   }
   await winningTitle();

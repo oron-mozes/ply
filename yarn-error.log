@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/sagika/.nvm/versions/node/v14.19.3/bin/node /Users/sagika/.nvm/versions/node/v14.19.3/bin/yarn add @types/gradient-stringr --dev
+  /Users/sagika/.nvm/versions/node/v14.19.3/bin/node /Users/sagika/.nvm/versions/node/v14.19.3/bin/yarn add @types/cli-typer --dev
 
 PATH: 
   /Users/sagika/.nvm/versions/node/v14.19.3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/sagika/.nvm/versions/node/v14.19.3/bin:./node_modules/.bin/:/Users/sagika/Library/Android/sdk/emulator:/Users/sagika/Library/Android/sdk/tools:/Users/sagika/Library/Android/sdk/tools/bin:/Users/sagika/Library/Android/sdk/platform-tools:./node_modules/.bin/:/Users/sagika/Library/Android/sdk/emulator:/Users/sagika/Library/Android/sdk/tools:/Users/sagika/Library/Android/sdk/tools/bin:/Users/sagika/Library/Android/sdk/platform-tools
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://npm.dev.wixpress.com/@types%2fgradient-stringr: not_found
+  Error: https://npm.dev.wixpress.com/@types%2fcli-typer: not_found
       at Request.params.callback [as _callback] (/Users/sagika/.nvm/versions/node/v14.19.3/lib/node_modules/yarn/lib/cli.js:66145:18)
       at Request.self.callback (/Users/sagika/.nvm/versions/node/v14.19.3/lib/node_modules/yarn/lib/cli.js:140890:22)
       at Request.emit (events.js:400:28)
@@ -48,6 +48,8 @@ npm manifest:
     "dependencies": {
       "@marcster/snake-js": "^1.0.1",
       "axios": "^0.27.2",
+      "chalk": "4.1.2",
+      "cli-typer": "balzss/cli-typer",
       "node-notifier": "^10.0.1",
       "os": "^0.1.2",
       "path": "^0.12.7",
@@ -60,12 +62,13 @@ npm manifest:
       "yt-play-cli": "^0.13.5"
     },
     "devDependencies": {
+      "@types/chalk-animation": "^1.6.1",
       "@types/figlet": "^1.5.4",
+      "@types/gradient-string": "^1.1.2",
       "@types/inquirer": "^8.2.1",
       "@types/node-notifier": "^8.0.2",
       "@types/shelljs": "^0.8.11",
       "@types/yargs": "^17.0.10",
-      "chalk": "^5.0.0",
       "chalk-animation": "^1.6.0",
       "figlet": "^1.5.2",
       "gradient-string": "^2.0.0",
@@ -122,6 +125,11 @@ Lockfile:
     dependencies:
       defer-to-connect "^1.0.1"
   
+  "@types/chalk-animation@^1.6.1":
+    version "1.6.1"
+    resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/chalk-animation/-/chalk-animation-1.6.1.tgz#5e7439b78f8344a0c5d2cf261eb36b0c267fe609"
+    integrity sha1-XnQ5t4+DRKDF0s8mHrNrDCZ/5gk=
+  
   "@types/figlet@^1.5.4":
     version "1.5.4"
     resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/figlet/-/figlet-1.5.4.tgz#54a426d63e921a9bca44102c5b1b1f206fa56d93"
@@ -134,6 +142,13 @@ Lockfile:
     dependencies:
       "@types/minimatch" "*"
       "@types/node" "*"
+  
+  "@types/gradient-string@^1.1.2":
+    version "1.1.2"
+    resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/gradient-string/-/gradient-string-1.1.2.tgz#b6aa618fed6afd6b888aed9cd69d2a2c8f8880c4"
+    integrity sha1-tqphj+1q/WuIiu2c1p0qLI+IgMQ=
+    dependencies:
+      "@types/tinycolor2" "*"
   
   "@types/inquirer@^8.2.1":
     version "8.2.1"
@@ -180,7 +195,7 @@ Lockfile:
     dependencies:
       "@types/node" "*"
   
-  "@types/tinycolor2@^1.4.0":
+  "@types/tinycolor2@*", "@types/tinycolor2@^1.4.0":
     version "1.4.3"
     resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/tinycolor2/-/tinycolor2-1.4.3.tgz#ed4a0901f954b126e6a914b4839c77462d56e706"
     integrity sha1-7UoJAflUsSbmqRS0g5x3Ri1W5wY=
@@ -439,6 +454,14 @@ Lockfile:
       gradient-string "^1.1.0"
       meow "^4.0.0"
   
+  chalk@4.1.2, chalk@^4.1.0, chalk@^4.1.1, chalk@^4.1.2:
+    version "4.1.2"
+    resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
+    integrity sha1-qsTit3NKdAhnrrFr8CqtVWoeegE=
+    dependencies:
+      ansi-styles "^4.1.0"
+      supports-color "^7.1.0"
+  
   chalk@^2.3.2, chalk@^2.4.1:
     version "2.4.2"
     resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
@@ -447,19 +470,6 @@ Lockfile:
       ansi-styles "^3.2.1"
       escape-string-regexp "^1.0.5"
       supports-color "^5.3.0"
-  
-  chalk@^4.1.0, chalk@^4.1.1, chalk@^4.1.2:
-    version "4.1.2"
-    resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
-    integrity sha1-qsTit3NKdAhnrrFr8CqtVWoeegE=
-    dependencies:
-      ansi-styles "^4.1.0"
-      supports-color "^7.1.0"
-  
-  chalk@^5.0.0:
-    version "5.0.1"
-    resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/chalk/-/chalk-5.0.1.tgz#ca57d71e82bb534a296df63bbacc4a1c22b2a4b6"
-    integrity sha1-ylfXHoK7U0opbfY7usxKHCKypLY=
   
   chardet@^0.7.0:
     version "0.7.0"
@@ -522,6 +532,10 @@ Lockfile:
     version "2.6.1"
     resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/cli-spinners/-/cli-spinners-2.6.1.tgz#adc954ebe281c37a6319bfa401e6dd2488ffb70d"
     integrity sha1-rclU6+KBw3pjGb+kAebdJIj/tw0=
+  
+  cli-typer@balzss/cli-typer:
+    version "1.0.0"
+    resolved "https://codeload.github.com/balzss/cli-typer/tar.gz/26b8de07aca113bdf16cb9b2e7157acf8499112c"
   
   cli-width@^3.0.0:
     version "3.0.0"

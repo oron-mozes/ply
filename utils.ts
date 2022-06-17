@@ -53,3 +53,11 @@ export async function reportErrors(errors: string[]) {
     console.log(JSON.stringify({ reportErrorsResult }))
   }
 }
+
+export const shouldReFecthData = (timesetmp:number, timeInHours = 1) => {
+  const currentTime = Date.now();
+  const totalTime = (Math.round((currentTime - timesetmp ) / 1000 ) / 60) / 60;
+  
+  return totalTime > timeInHours;
+
+}

@@ -5,16 +5,22 @@ import inquirer from "inquirer";
 import gradient from "gradient-string";
 import chalkAnimation from "chalk-animation";
 import figlet from "figlet";
-import fs from 'fs';
-import { getLocalStorage } from "../../../utils";
+import fs from "fs";
+import {
+  getLocalStorage,
+  getUserData,
+  shouldReFecthData,
+} from "../../../utils";
 import { createSpinner } from "nanospinner";
 import { echo, exec } from "shelljs";
+import { apiBaseUrl } from "../../../consts";
+import axios from "axios";
 
 type Question = {
   _id: string;
   question: string;
   options: string[];
-  currectAnswer: number;
+  correctAnswer: number;
   successRate: number;
   failureRate: number;
   additionalInfo: string;
@@ -35,23 +41,43 @@ const welcome = async () => {
                             ${chalk.blue("INSTRUCTIONS")}
         ==============================================================
         ${chalk.green(
-    "You need to get all answers correct"
-  )} to get to the final prize.
+          "You need to get all answers correct"
+        )} to get to the final prize.
         ${chalk.red("If you get any question wrong")}, you lose...
     `);
-}
+};
 
-const handleAnswer = async (isCorrect: boolean, additionalInfo: string, additionalLink: string) => {
+const handleAnswer = async ({
+  isCorrect,
+  additionalInfo,
+  additionalLink,
+  successRate,
+  failureRate,
+}: {
+  isCorrect: boolean;
+  additionalInfo: string;
+  additionalLink: string;
+  successRate: number;
+  failureRate: number;
+}) => {
   const spinner = createSpinner("And the answer is....");
   const result = isCorrect ? "success" : "error";
   const text = isCorrect ? "That is CORRECT!" : `💀💀 WRONG 💀💀`;
-  const additionInfoMsg = additionalInfo ? `\n${chalk.blueBright("FYI")}\n\n${additionalInfo}` : '';
-  const additionalLinkMsg = additionalLink ? `You can read more about it here: ${additionalLink}` : '';
+  const answerRate = `This question was answered correctly ${successRate} times and incorrectly ${failureRate} times.`;
+  const additionInfoMsg = additionalInfo
+    ? `\n${chalk.blueBright("FYI")}\n\n${additionalInfo}`
+    : "";
+  const additionalLinkMsg = additionalLink
+    ? `You can read more about it here: ${additionalLink}`
+    : "";
 
   spinner[result]({ text });
+  echo(answerRate);
   echo(additionInfoMsg);
   echo(additionalLinkMsg);
-}
+
+  return isCorrect;
+};
 
 const winningTitle = async () => {
   const msg = `WELL DONE`;
@@ -59,10 +85,19 @@ const winningTitle = async () => {
   figlet(msg, (_err, data) => {
     console.log(gradient.pastel.multiline(data));
   });
-}
+};
 
 const askQuestion = async (data: Question) => {
-  const { _id, question, options, currectAnswer, additionalInfo, additionalLink } = data;
+  const {
+    _id,
+    question,
+    options,
+    correctAnswer,
+    additionalInfo,
+    additionalLink,
+    successRate,
+    failureRate,
+  } = data;
   const answer = await inquirer.prompt({
     name: _id,
     message: question,
@@ -70,18 +105,95 @@ const askQuestion = async (data: Question) => {
     type: "list",
   });
 
-  const isCorrect = options.findIndex(option => option === answer[_id]) === currectAnswer;
-  return handleAnswer(isCorrect, additionalInfo, additionalLink);
+  const isCorrect =
+    options.findIndex((option) => option === answer[_id]) === correctAnswer;
+  return handleAnswer({
+    isCorrect,
+    additionalInfo,
+    additionalLink,
+    successRate,
+    failureRate,
+  });
+};
+
+const reportSeenQuestion = async (allQuestions: Question[], seenQuestions: string[]) => {
+  const { id: userId } = getUserData();
+  const bulk = allQuestions.reduce<{itemId: string; correct: boolean;}[]>((acc, question) => {
+    acc.push({
+      itemId: question._id,
+      correct: seenQuestions.some(seenQuestion => seenQuestion === question._id),
+    });
+    return acc;
+  }, [])
+  try {
+    await axios.post(`${apiBaseUrl}/updateTrivia`, {
+      userId,
+      bulk: [],
+    });
+  } catch (error) {
+  }
+};
+
+const writeNewSeenQuestion = (
+  items: Question[],
+  seenQuestions: string[],
+  timestamp: number
+) => {
+  fs.writeFile(
+    `${getLocalStorage()}/trivia.json`,
+    JSON.stringify({ items: [...items], seen: [...seenQuestions], timestamp }),
+    (err) => {
+      if (err) throw err;
+    }
+  );
+};
+
+const reFetchDataIfNeeded = async (timestamp: number) => {
+  if (shouldReFecthData(timestamp, 3)) {
+    const { data } = await axios.get(`${apiBaseUrl}/trivia`);
+    data.seen = [];
+    data.timestamp = Date.now();
+    fs.writeFile(
+      `${getLocalStorage()}/trivia.json`,
+      JSON.stringify(data),
+      (err) => {
+        if (err) throw err;
+      }
+    );
+  }
 };
 
 export const initTrivia = async () => {
-  const { items: questionArray }: { items: Question[] } = JSON.parse(fs.readFileSync(`${getLocalStorage()}/trivia.json`, 'utf-8'))
-
+  const {
+    items: questionArray,
+    seen: seenQuestions,
+    timestamp,
+  }: {
+    items: Question[];
+    seen: Question["_id"][];
+    timestamp: number;
+  } = JSON.parse(fs.readFileSync(`${getLocalStorage()}/trivia.json`, "utf-8"));
+  const newSeenQuestions = seenQuestions ?? [];
+  const notSeenYetQuestion = questionArray.filter(
+    (question) =>
+      !newSeenQuestions.some(
+        (seenQuestionId) => seenQuestionId === question._id
+      )
+  );
   exec("clear");
+  echo(` seenQuestions : ${JSON.stringify(seenQuestions, null, 2)}`);
+  echo(` questionArray : ${JSON.stringify(questionArray, null, 2)}`);
+  echo(` notSeen : ${JSON.stringify(notSeenYetQuestion, null, 2)}`);
 
   await welcome();
-  for await (const question of questionArray) {
-    await askQuestion(question);
+  for await (const question of notSeenYetQuestion) {
+    const answer = await askQuestion(question);
+    if (answer) {
+      newSeenQuestions.push(question._id);
+    }
   }
   await winningTitle();
+  await reportSeenQuestion(notSeenYetQuestion, newSeenQuestions);
+  writeNewSeenQuestion(questionArray, newSeenQuestions, timestamp);
+  reFetchDataIfNeeded(timestamp);
 };

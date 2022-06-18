@@ -51,7 +51,7 @@ export async function reportErrors(errors: string[], action:string) {
         userId: userData.id,
         name: packageJson.name,
         action,
-        dependencies: Object.keys(packageJson.dependencies).concat(Object.keys(packageJson.devDependencies))
+        dependencies: Array.from(new Set(Object.keys(packageJson.dependencies).concat(Object.keys(packageJson.devDependencies)))
       });
 
     console.log(JSON.stringify({ reportErrorsResult }))

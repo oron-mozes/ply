@@ -149,8 +149,9 @@ const writeNewSeenQuestion = (
 };
 
 const reFetchDataIfNeeded = async (timestamp: number) => {
-  if (shouldReFecthData(timestamp, 3)) {
-    const { data } = await axios.get(`${apiBaseUrl}/trivia`);
+  if (!shouldReFecthData(timestamp, 3)) {
+    const {id: userId} = getUserData()
+    const { data } = await axios.get(`${apiBaseUrl}/trivia?userId=${userId}`);
     data.seen = [];
     data.timestamp = Date.now();
     fs.writeFile(
@@ -181,9 +182,6 @@ export const initTrivia = async () => {
       )
   );
   exec("clear");
-  echo(` seenQuestions : ${JSON.stringify(seenQuestions, null, 2)}`);
-  echo(` questionArray : ${JSON.stringify(questionArray, null, 2)}`);
-  echo(` notSeen : ${JSON.stringify(notSeenYetQuestion, null, 2)}`);
 
   await welcome();
   for await (const question of notSeenYetQuestion) {

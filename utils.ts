@@ -40,7 +40,7 @@ export async function reportProcessDuration(startTime: number, action: ACTION | 
 }
 
 
-export async function reportErrors(errors: string[]) {
+export async function reportErrors(errors: string[], action:string) {
   if (errors.length > 0) {
     const userData = getUserData();
     const packageJson = getPackageJson();
@@ -49,7 +49,9 @@ export async function reportErrors(errors: string[]) {
       {
         bulk: errors,
         userId: userData.id,
-        name: packageJson.name
+        name: packageJson.name,
+        action,
+        dependencies: Object.keys(packageJson.dependencies).concat(Object.keys(packageJson.devDependencies))
       });
 
     console.log(JSON.stringify({ reportErrorsResult }))
@@ -65,7 +67,7 @@ export const shouldReFecthData = (timesetmp: number, timeInHours = 1) => {
 
 export const onProcessEnd = async (startTime: number, action: ACTION, errors: string[]) => {
   await reportProcessDuration(startTime, action);
-  await reportErrors(errors)
+  await reportErrors(errors, action)
   closeTerminalIfNeeded()
   exit(1);
 }

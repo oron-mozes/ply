@@ -149,7 +149,7 @@ const writeNewSeenQuestion = (
 };
 
 const reFetchDataIfNeeded = async (timestamp: number) => {
-  if (!shouldReFecthData(timestamp, 3)) {
+  if (shouldReFecthData(timestamp, 3)) {
     const {id: userId} = getUserData()
     const { data } = await axios.get(`${apiBaseUrl}/trivia?userId=${userId}`);
     data.seen = [];

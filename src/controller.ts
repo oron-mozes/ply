@@ -27,10 +27,12 @@ let isTerminalActive = false;
       return ACTION.INSTALL;
     }
 
+    if (cmd.some(arg => arg.toLowerCase() === 'install')) {
+      return ACTION.INSTALL;
+    }
     if (cmd.some(arg => arg.toLowerCase() === 'add')) {
       return ACTION.ADD;
     }
-
     if (cmd.some(arg => arg.toLowerCase() === 'build')) {
       return ACTION.BUILD
     }
@@ -109,7 +111,7 @@ let isTerminalActive = false;
   }
 
   if (!argv.length) {
-    echo('Please enter a command')
+    // echo('Please enter a command')
   } else {
     const startTime: number = Date.now();
     const { internalFlags, executionCommand, packageManager, action } = interpretCommand(argv);

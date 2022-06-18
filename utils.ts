@@ -13,19 +13,9 @@ export const getLocalStorage = (): string => `${homedir()}/.ply/local-storage`;
 export const getUserData = (): UserData =>
   JSON.parse(fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf8'));
 
-export function shouldReportError(error: string) {
-  // TODO: find a better filters
-  const containKeywords = ['error', 'failed'];
-  const notContainKeywords = ['command failed with exit code'];
-
-  return (
-    containKeywords.some((keyword) =>
-      error?.toLowerCase()?.includes?.(keyword)
-    ) &&
-    !notContainKeywords.some((keyword) =>
-      error?.toLowerCase()?.includes(keyword)
-    )
-  );
+export function shouldReportError(error: string): boolean {
+  const type = error.split(' ').shift() as string;
+  return ['error', 'failed'].includes(type)
 }
 
 export async function reportProcessDuration(
@@ -43,7 +33,7 @@ export async function reportProcessDuration(
     time: durationInMs,
   });
 
-  echo(chalk.green(`Thanks for helping our dev flow better.`));
+  echo(chalk.green(`Thanks for helping our dev flow be better.`));
 }
 
 export async function reportErrors(errors: string[], action: string) {

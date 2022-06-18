@@ -27,6 +27,7 @@ export const installFn = async ({ executionProcess, startTime }:
     // }
 
     if (shouldReportError(error)) {
+      echo(chalk.redBright(error))
       errors.push(error);
     }
   })
@@ -38,7 +39,7 @@ export const installFn = async ({ executionProcess, startTime }:
   })
 
   executionProcess.stdout?.once('end', async () => {
-    echo(chalk.redBright(Array.from(errList.values())))
+   
     await onProcessEnd(startTime, ACTION.INSTALL, errors);
   });
 }

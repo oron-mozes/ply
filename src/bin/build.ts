@@ -16,17 +16,13 @@ export const buildFn = async ({ executionProcess, startTime }:
   }) => {
 
   let errors: string[] = [];
-  const errList:Set<string> = new Set([]);
   executionProcess?.stderr?.on('data', (error) => {
-    const e = error.split(' ');
-    errList.add(JSON.stringify({type: e.shift(), e: e.join(' ')}))
     if (shouldReportError(error)) {
       errors.push(error);
     }
   })
 
   executionProcess.stdout?.once('end', async () => {
-    echo(chalk.cyanBright(Array.from(errList.values())))
     await onProcessEnd(startTime, ACTION.BUILD, errors);
   });
 }

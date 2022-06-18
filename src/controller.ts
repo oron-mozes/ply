@@ -27,10 +27,12 @@ let isTerminalActive = false;
       return ACTION.INSTALL;
     }
 
+    if (cmd.some(arg => arg.toLowerCase() === 'install')) {
+      return ACTION.INSTALL;
+    }
     if (cmd.some(arg => arg.toLowerCase() === 'add')) {
       return ACTION.ADD;
     }
-
     if (cmd.some(arg => arg.toLowerCase() === 'build')) {
       return ACTION.BUILD
     }

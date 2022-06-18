@@ -109,7 +109,7 @@ let isTerminalActive = false;
   }
 
   if (!argv.length) {
-    echo('Please enter a command')
+    // echo('Please enter a command')
   } else {
     const startTime: number = Date.now();
     const { internalFlags, executionCommand, packageManager, action } = interpretCommand(argv);

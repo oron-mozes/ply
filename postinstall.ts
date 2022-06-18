@@ -4,40 +4,72 @@
 //https://www.npmjs.com/package/os
 
 import { echo, exec } from 'shelljs';
-import fs from 'fs';
 import { userInfo } from 'os';
 import { apiBaseUrl } from './consts';
 import { getLocalStorage } from './utils';
-import readline from 'readline';
+import chalk from "chalk";
+import fs from 'fs';
+import inquirer from "inquirer";
+import axios from 'axios';
 
 const user = userInfo();
-const axios = require('axios');
 
 exec(`mkdir -p ${getLocalStorage()}`);
 
 const signupUser = async () => {
-  if (!fs.existsSync(`${getLocalStorage()}/user.json`)) {
-    var rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-    rl.question('What is your email? ', async function (answer) {
-      console.log('Thank you for registering for our ply cli:', answer);
-      const { data } = await axios.put(`${apiBaseUrl}/user`, {
-        name: user.username,
-        email: answer.trim(),
-      });
+  if (fs.existsSync(`${getLocalStorage()}/user.json`)) return;
 
-      fs.writeFile(
-        `${getLocalStorage()}/user.json`,
-        JSON.stringify(data),
-        function (err) {
-          if (err) throw err;
-        }
-      );
-      rl.close();
+  console.clear();
+  console.log(`Welcome To The ${chalk.redBright(chalk.bold("</Sideshow>"))}\n`)
+  const { userType } = await inquirer.prompt({
+    name: "userType",
+    message: "Are you signing up to a workspace or as a private user?",
+    choices: ['Private', 'Workspace'],
+    type: "list",
+    prefix: '',
+  });
+
+  let userOrg: string = '';
+  const isAnEmployee = userType === "Workspace";
+
+  if (isAnEmployee) {
+    const { organization } = await inquirer.prompt({
+      name: "organization",
+      message: "Please select a workspace to join",
+      choices: ['WIX', 'Microsoft', 'Floatplane'],
+      type: "list",
+      prefix: '',
+
     });
+
+    userOrg = organization;
   }
+
+  const { userEmail } = await inquirer.prompt({
+    name: "userEmail",
+    message: `Please enter an email${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+    type: "input",
+    prefix: '',
+  });
+
+
+  console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
+  if (isAnEmployee) {
+    console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
+  }
+
+  const { data } = await axios.put(`${apiBaseUrl}/user`, {
+    name: user.username,
+    email: userEmail.trim(),
+  });
+
+  fs.writeFile(
+    `${getLocalStorage()}/user.json`,
+    JSON.stringify(data),
+    function (err) {
+      if (err) throw err;
+    }
+  );
 };
 
 const saveData = async () => {

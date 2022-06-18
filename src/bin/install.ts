@@ -19,6 +19,12 @@ export const installFn = async ({ executionProcess, startTime }:
       errors.push(error);
     }
   })
+  executionProcess?.stderr?.on('error', (error) => {
+    console.log('ERRR::::::::::::::::::::', error)
+    // if (shouldReportError(error)) {
+    //   errors.push(error);
+    // }
+  })
 
   executionProcess.stdout?.once('end', async () => {
     await onProcessEnd(startTime, ACTION.INSTALL, errors);

@@ -16,10 +16,12 @@ import YT from './Features/YT';
 import { genericFn } from './bin/generic';
 import feed from './Features/feed';
 import path from 'path';
+import { signupUser } from '../postinstall';
 
 let isTerminalActive = false;
 
 (async function () {
+  await signupUser()
   const argv = hideBin(process.argv);
 
   const getYarnAction = (cmd: string[]): ACTION => {

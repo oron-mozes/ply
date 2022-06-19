@@ -16,35 +16,61 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.signupUser = void 0;
 const shelljs_1 = require("shelljs");
 const os_1 = require("os");
 const consts_1 = require("./consts");
 const utils_1 = require("./utils");
+const chalk_1 = __importDefault(require("chalk"));
 const fs_1 = __importDefault(require("fs"));
+const inquirer_1 = __importDefault(require("inquirer"));
 const axios_1 = __importDefault(require("axios"));
-const readline_1 = __importDefault(require("readline"));
 const user = (0, os_1.userInfo)();
 (0, shelljs_1.exec)(`mkdir -p ${(0, utils_1.getLocalStorage)()}`);
-const signupUser = () => {
-    var rl = readline_1.default.createInterface({
-        input: process.stdin,
-        output: process.stdout,
+const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
+    if (fs_1.default.existsSync(`${(0, utils_1.getLocalStorage)()}/user.json`))
+        return;
+    console.clear();
+    console.log(`Welcome To The ${chalk_1.default.redBright(chalk_1.default.bold("</Sideshow>"))}\n`);
+    const { userType } = yield inquirer_1.default.prompt({
+        name: "userType",
+        message: "Are you signing up to a workspace or as a private user?",
+        choices: ['Private', 'Workspace'],
+        type: "list",
+        prefix: '',
     });
-    rl.question('What is your email? ', function (answer) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('Thank you for registering for our ply cli:', answer);
-            const { data } = yield axios_1.default.put(`${consts_1.apiBaseUrl}/user`, {
-                name: user.username,
-                email: answer.trim(),
-            });
-            fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/user.json`, JSON.stringify(data), function (err) {
-                if (err)
-                    throw err;
-            });
-            rl.close();
+    let userOrg = '';
+    const isAnEmployee = userType === "Workspace";
+    if (isAnEmployee) {
+        const { organization } = yield inquirer_1.default.prompt({
+            name: "organization",
+            message: "Please select a workspace to join",
+            choices: ['WIX', 'Microsoft', 'Floatplane'],
+            type: "list",
+            prefix: '',
         });
+        userOrg = organization;
+    }
+    const { userEmail } = yield inquirer_1.default.prompt({
+        name: "userEmail",
+        message: `Please enter an email${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+        type: "input",
+        prefix: '',
     });
-};
+    console.log(`\n${chalk_1.default.greenBright("Thank you for registering!")}`);
+    if (isAnEmployee) {
+        console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk_1.default.bold("verify your email.")}`);
+    }
+    const { data } = yield axios_1.default.put(`${consts_1.apiBaseUrl}/user`, {
+        name: user.username,
+        email: userEmail.trim(),
+    });
+    fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/user.json`, JSON.stringify(data), function (err) {
+        if (err)
+            throw err;
+    });
+});
+exports.signupUser = signupUser;
 const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
     const keys = ['music', 'feed', 'trivia'];
     const timestamp = Date.now();
@@ -58,5 +84,5 @@ const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
         });
     })));
 });
-signupUser();
+// signupUser();
 saveData();

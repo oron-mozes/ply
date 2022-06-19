@@ -7,40 +7,70 @@ import { echo, exec } from 'shelljs';
 import { userInfo } from 'os';
 import { apiBaseUrl } from './consts';
 import { getLocalStorage, getUserData } from './utils';
+import chalk from "chalk";
 import fs from 'fs';
+import inquirer from "inquirer";
 import axios from 'axios';
-import readline from 'readline';
-
 
 const user = userInfo();
 
 exec(`mkdir -p ${getLocalStorage()}`);
 
-const signupUser = () => {
- 
-  var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
+export const signupUser = async () => {
+  if (fs.existsSync(`${getLocalStorage()}/user.json`)) return;
+
+  console.clear();
+  console.log(`Welcome To The ${chalk.redBright(chalk.bold("</Sideshow>"))}\n`)
+  const { userType } = await inquirer.prompt({
+    name: "userType",
+    message: "Are you signing up to a workspace or as a private user?",
+    choices: ['Private', 'Workspace'],
+    type: "list",
+    prefix: '',
   });
-  rl.question('What is your email? ', async function (answer) {
-    console.log('Thank you for registering for our ply cli:', answer);
-    const { data } = await axios.put(`${apiBaseUrl}/user`, {
-      name: user.username,
-      email: answer.trim(),
+
+  let userOrg: string = '';
+  const isAnEmployee = userType === "Workspace";
+
+  if (isAnEmployee) {
+    const { organization } = await inquirer.prompt({
+      name: "organization",
+      message: "Please select a workspace to join",
+      choices: ['WIX', 'Microsoft', 'Floatplane'],
+      type: "list",
+      prefix: '',
+
     });
 
-    fs.writeFile(
-      `${getLocalStorage()}/user.json`,
-      JSON.stringify(data),
-      function (err) {
-        if (err) throw err;
-      }
-    );
-    rl.close();
-  });
-}
-  
+    userOrg = organization;
+  }
 
+  const { userEmail } = await inquirer.prompt({
+    name: "userEmail",
+    message: `Please enter an email${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+    type: "input",
+    prefix: '',
+  });
+
+
+  console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
+  if (isAnEmployee) {
+    console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
+  }
+
+  const { data } = await axios.put(`${apiBaseUrl}/user`, {
+    name: user.username,
+    email: userEmail.trim(),
+  });
+
+  fs.writeFile(
+    `${getLocalStorage()}/user.json`,
+    JSON.stringify(data),
+    function (err) {
+      if (err) throw err;
+    }
+  );
+};
 
 const saveData = async () => {
   const keys = ['music', 'feed', 'trivia'];
@@ -62,5 +92,5 @@ const saveData = async () => {
   );
 };
 
-signupUser();
+// signupUser();
 saveData();

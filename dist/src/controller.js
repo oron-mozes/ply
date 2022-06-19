@@ -30,10 +30,12 @@ const YT_1 = __importDefault(require("./Features/YT"));
 const generic_1 = require("./bin/generic");
 const feed_1 = __importDefault(require("./Features/feed"));
 const path_1 = __importDefault(require("path"));
+const postinstall_1 = require("../postinstall");
 let isTerminalActive = false;
 (function () {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
+        yield (0, postinstall_1.signupUser)();
         const argv = (0, helpers_1.hideBin)(process.argv);
         const getYarnAction = (cmd) => {
             if (cmd.length === 1) {

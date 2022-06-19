@@ -123,7 +123,7 @@ function init() {
             (0, feed_1.default)();
             if (internalFlags.includes("--p-game")) {
                 const pathToGame = path_1.default.resolve(__dirname, './Features/Game/index.js');
-                (0, shelljs_1.exec)(`open -a Terminal ${pathToGame}`);
+                (0, shelljs_1.exec)(`open -a iTerm ${pathToGame}`);
                 isTerminalActive = true;
             }
             switch (action) {

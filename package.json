@@ -1,6 +1,6 @@
 {
   "name": "ply-cli",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "\"Ply-cli\" is a cli tool that aim to entertain you while you wait for any process to be over.",
   "main": "index.js",
   "scripts": {
@@ -29,9 +29,7 @@
     "ttab": "^0.7.2",
     "typescript": "^4.7.3",
     "yargs": "^17.5.1",
-    "yt-play-cli": "^0.13.5"
-  },
-  "devDependencies": {
+    "yt-play-cli": "^0.13.5",
     "@types/chalk-animation": "^1.6.1",
     "@types/figlet": "^1.5.4",
     "@types/gradient-string": "^1.1.2",
@@ -44,5 +42,8 @@
     "gradient-string": "^2.0.0",
     "inquirer": "^8.2.0",
     "nanospinner": "^1.0.0"
+  },
+  "devDependencies": {
+    
   }
 }

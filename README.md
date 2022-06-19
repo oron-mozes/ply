@@ -10,7 +10,7 @@ During installation you will be asked to enter your email address.
 ```
 
 ## How to use it?
-Just make sure to call ply before your day to day commandes.
+Just make sure to call ply before your day to day commands.
 > ply (yarn | npm) install
 > ply (yarn | npm) build
 > etc'

@@ -22,10 +22,10 @@ const consts_1 = require("./consts");
 const utils_1 = require("./utils");
 const chalk_1 = __importDefault(require("chalk"));
 const fs_1 = __importDefault(require("fs"));
-const inquirer_1 = __importDefault(require("inquirer"));
+// import inquirer from "inquirer";
 const axios_1 = __importDefault(require("axios"));
-// import rd from 'readline';
-var prompt = inquirer_1.default.createPromptModule();
+const readline_1 = __importDefault(require("readline"));
+// var prompt = inquirer.createPromptModule();
 const user = (0, os_1.userInfo)();
 (0, shelljs_1.exec)(`mkdir -p ${(0, utils_1.getLocalStorage)()}`);
 const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -58,25 +58,46 @@ const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
     //   type: "input",
     //   prefix: '',
     // });
-    prompt({
-        name: "userEmail",
-        message: `Please enter an email`,
-        type: "input",
-        prefix: '',
-    }).then((userEmail) => __awaiter(void 0, void 0, void 0, function* () {
-        const { data } = yield axios_1.default.put(`${consts_1.apiBaseUrl}/user`, {
-            name: user.username,
-            email: userEmail.trim(),
-        });
-        fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/user.json`, JSON.stringify(data), function (err) {
-            if (err)
-                throw err;
-        });
-    }));
+    // prompt({
+    //   name: "userEmail",
+    //   message: `Please enter an email`,//${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+    //   type: "input",
+    //   prefix: '',
+    // }).then(async (userEmail:any) => {
+    //   const {data} = await axios.put(`${apiBaseUrl}/user`, {
+    //     name: user.username,
+    //     email: userEmail.trim(),
+    //   });
+    //   fs.writeFile(
+    //     `${getLocalStorage()}/user.json`,
+    //     JSON.stringify(data),
+    //     function (err) {
+    //       if (err) throw err;
+    //     }
+    //   );
+    // })
     // console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
     // if (isAnEmployee) {
     //   console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
     // }
+    var rl = readline_1.default.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+    rl.question('What is your email? ', function (answer) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('Thank you for registering for our ply cli:', answer);
+            const { data } = yield axios_1.default.put(`${consts_1.apiBaseUrl}/user`, {
+                name: user.username,
+                email: answer.trim(),
+            });
+            fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/user.json`, JSON.stringify(data), function (err) {
+                if (err)
+                    throw err;
+            });
+            rl.close();
+        });
+    });
 });
 const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
     const keys = ['music', 'feed', 'trivia'];

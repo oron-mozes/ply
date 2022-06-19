@@ -9,10 +9,11 @@ import { apiBaseUrl } from './consts';
 import { getLocalStorage, getUserData } from './utils';
 import chalk from "chalk";
 import fs from 'fs';
-import inquirer from "inquirer";
+// import inquirer from "inquirer";
 import axios from 'axios';
-// import rd from 'readline';
-var prompt = inquirer.createPromptModule();
+import readline from 'readline';
+
+// var prompt = inquirer.createPromptModule();
 const user = userInfo();
 
 exec(`mkdir -p ${getLocalStorage()}`);
@@ -53,17 +54,41 @@ const signupUser = async () => {
   //   prefix: '',
   // });
 
-  prompt({
-    name: "userEmail",
-    message: `Please enter an email`,//${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
-    type: "input",
-    prefix: '',
-  }).then(async (userEmail:any) => {
-    const {data} = await axios.put(`${apiBaseUrl}/user`, {
-      name: user.username,
-      email: userEmail.trim(),
-    });
+  // prompt({
+  //   name: "userEmail",
+  //   message: `Please enter an email`,//${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+  //   type: "input",
+  //   prefix: '',
+  // }).then(async (userEmail:any) => {
+  //   const {data} = await axios.put(`${apiBaseUrl}/user`, {
+  //     name: user.username,
+  //     email: userEmail.trim(),
+  //   });
   
+  //   fs.writeFile(
+  //     `${getLocalStorage()}/user.json`,
+  //     JSON.stringify(data),
+  //     function (err) {
+  //       if (err) throw err;
+  //     }
+  //   );
+  // })
+
+  // console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
+  // if (isAnEmployee) {
+  //   console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
+  // }
+  var rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  rl.question('What is your email? ', async function (answer) {
+    console.log('Thank you for registering for our ply cli:', answer);
+    const { data } = await axios.put(`${apiBaseUrl}/user`, {
+      name: user.username,
+      email: answer.trim(),
+    });
+
     fs.writeFile(
       `${getLocalStorage()}/user.json`,
       JSON.stringify(data),
@@ -71,15 +96,11 @@ const signupUser = async () => {
         if (err) throw err;
       }
     );
-  })
-
-  // console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
-  // if (isAnEmployee) {
-  //   console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
-  // }
-
+    rl.close();
+  });
+}
   
-};
+
 
 const saveData = async () => {
   const keys = ['music', 'feed', 'trivia'];

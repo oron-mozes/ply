@@ -24,7 +24,7 @@ You can use any of our commands to make your down time fun.
 | ------------- |:-------------:| -----:|
 | --p-game     | Terminal games |  You can play one of our games and be in our score board lead: "Snake", "Trivia" or "Fast Type" |
 | --p-play      | Fun Tunes      |   we will play random songs that meet the duration of your process |
-| --p-feed | Did you know?     |    Company related news, Fun tips and tricks and anything intresting takin place in the world. we will update you them |
+| --p-feed | Did you know?     |    Company related news, Fun tips and tricks and anything intresting taking place in the world. we will update you them |
 
 > ply yarn install --p-game --p-play
 

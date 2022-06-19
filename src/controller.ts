@@ -163,7 +163,7 @@ async function init() {
 init()
 export const closeTerminalIfNeeded = () => {
   if (isTerminalActive) {
-    exec('osascript -e \'tell application "Terminal" to close first window\'');
+    exec('osascript -e \'tell application "iTerm" to close first window\'');
     isTerminalActive = false;
   }
 }

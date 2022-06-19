@@ -151,7 +151,7 @@ function init() {
 init();
 const closeTerminalIfNeeded = () => {
     if (isTerminalActive) {
-        (0, shelljs_1.exec)('osascript -e \'tell application "Terminal" to close first window\'');
+        (0, shelljs_1.exec)('osascript -e \'tell application "iTerm" to close first window\'');
         isTerminalActive = false;
     }
 };

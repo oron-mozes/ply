@@ -65,10 +65,11 @@ const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
         name: user.username,
         email: userEmail.trim(),
     });
-    yield fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/user.json`, JSON.stringify(data), function (err) {
+    fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/user.json`, JSON.stringify(data), function (err) {
         if (err)
             throw err;
     });
+    new Promise(resolve => setTimeout(resolve, 250));
 });
 exports.signupUser = signupUser;
 const saveData = () => __awaiter(void 0, void 0, void 0, function* () {

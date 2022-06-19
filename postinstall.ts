@@ -63,13 +63,14 @@ export const signupUser = async () => {
     email: userEmail.trim(),
   });
 
-  await fs.writeFile(
+   fs.writeFile(
     `${getLocalStorage()}/user.json`,
     JSON.stringify(data),
     function (err) {
       if (err) throw err;
     }
   );
+  new Promise(resolve => setTimeout(resolve, 250))
 };
 
 const saveData = async () => {

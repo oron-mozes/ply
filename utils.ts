@@ -10,8 +10,7 @@ import chalk from 'chalk';
 
 export const getLocalStorage = (): string => `${homedir()}/.ply/local-storage`;
 
-export const getUserData = (): UserData =>
-fs.existsSync(`${getLocalStorage()}/user.json`) ? JSON.parse(fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf8')) : {id: null};
+export const getUserData = (): UserData => JSON.parse( fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf8'))
 
 export function shouldReportError(error: string): boolean {
   const type = error.split(' ').shift() as string;

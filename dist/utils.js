@@ -23,7 +23,7 @@ const shelljs_1 = require("shelljs");
 const chalk_1 = __importDefault(require("chalk"));
 const getLocalStorage = () => `${(0, os_1.homedir)()}/.ply/local-storage`;
 exports.getLocalStorage = getLocalStorage;
-const getUserData = () => fs_1.default.existsSync(`${(0, exports.getLocalStorage)()}/user.json`) ? JSON.parse(fs_1.default.readFileSync(`${(0, exports.getLocalStorage)()}/user.json`, 'utf8')) : { id: null };
+const getUserData = () => JSON.parse(fs_1.default.readFileSync(`${(0, exports.getLocalStorage)()}/user.json`, 'utf8'));
 exports.getUserData = getUserData;
 function shouldReportError(error) {
     const type = error.split(' ').shift();

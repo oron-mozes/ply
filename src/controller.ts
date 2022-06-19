@@ -21,7 +21,7 @@ import { signupUser } from '../postinstall';
 let isTerminalActive = false;
 
 (async function () {
-  await signupUser()
+  await signupUser();
   const argv = hideBin(process.argv);
 
   const getYarnAction = (cmd: string[]): ACTION => {

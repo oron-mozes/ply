@@ -14,6 +14,7 @@ import axios from 'axios';
 
 const user = userInfo();
 
+exec("chmod a+x dist/src/**/*.js");
 exec(`mkdir -p ${getLocalStorage()}`);
 
 const signupUser = async () => {

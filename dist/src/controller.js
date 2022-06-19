@@ -20,7 +20,7 @@ const build_1 = require("./bin/build");
 const axios_1 = __importDefault(require("axios"));
 const consts_1 = require("../consts");
 const read_package_json_1 = require("./services/read-package-json");
-const utils_1 = require("./utils");
+const services_1 = require("./services");
 const install_1 = require("./bin/install");
 const types_1 = require("../types");
 const test_1 = require("./bin/test");
@@ -33,10 +33,10 @@ let isTerminalActive = false;
 function init() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const user = (0, utils_1.getUserData)();
+        const user = (0, services_1.getUserData)();
         if (!user.id) {
-            yield (0, utils_1.signupUser)();
-            yield (0, utils_1.saveData)();
+            yield (0, services_1.signupUser)();
+            yield (0, services_1.saveData)();
         }
         const argv = (0, helpers_1.hideBin)(process.argv);
         const getYarnAction = (cmd) => {
@@ -117,7 +117,7 @@ function init() {
             const { internalFlags, executionCommand, packageManager, action } = interpretCommand(argv);
             const executionProcess = (0, shelljs_1.exec)(executionCommand, { async: true });
             const pkg = (0, read_package_json_1.getPackageJson)();
-            const user = (0, utils_1.getUserData)();
+            const user = (0, services_1.getUserData)();
             const { data: projectData } = yield axios_1.default.get(`${consts_1.apiBaseUrl}/project?name=${pkg.name}&userId=${user.id}&action=${action}`);
             (0, YT_1.default)((_a = projectData.personalDuration) !== null && _a !== void 0 ? _a : 3);
             (0, feed_1.default)();

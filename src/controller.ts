@@ -6,7 +6,8 @@ import { buildFn } from './bin/build';
 import axios from 'axios';
 import { apiBaseUrl } from '../consts';
 import { getPackageJson } from './services/read-package-json';
-import { getUserData, signupUser, saveData } from './utils';
+
+import { getUserData, signupUser, saveData } from './services';
 import { installFn } from './bin/install';
 import { ACTION, PACKAGE_MANAGER, ProjectData } from '../types';
 import { testFn } from './bin/test';
@@ -19,6 +20,7 @@ import path from 'path';
 let isTerminalActive = false;
 
 async function init() {
+  
   const user = getUserData();
 
   if (!user.id) {

@@ -7,7 +7,7 @@ import { exec } from 'shelljs';
 import { getLocalStorage } from './utils';
 import fs from 'fs';
 
-exec("chmod a+x dist/src/**/*.js");
+// exec("chmod a+x dist/src/**/*.js");
 exec(`mkdir -p ${getLocalStorage()}`);
 
 const saveUserFile = () => {

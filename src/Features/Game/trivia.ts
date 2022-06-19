@@ -148,7 +148,7 @@ const reportSeenQuestion = async (
   try {
     await axios.post(`${apiBaseUrl}/updateTrivia`, {
       userId,
-      bulk: [],
+      bulk: bulk,
     });
   } catch (error) {}
 };

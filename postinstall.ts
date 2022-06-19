@@ -6,7 +6,7 @@
 import { echo, exec } from 'shelljs';
 import { userInfo } from 'os';
 import { apiBaseUrl } from './consts';
-import { getLocalStorage } from './utils';
+import { getLocalStorage, getUserData } from './utils';
 import chalk from "chalk";
 import fs from 'fs';
 import inquirer from "inquirer";
@@ -76,9 +76,10 @@ const signupUser = async () => {
 const saveData = async () => {
   const keys = ['music', 'feed', 'trivia'];
   const timestamp = Date.now();
+  const { id: userId } = getUserData();
   await Promise.all(
     keys.map(async (key) => {
-      const { data } = await axios.get(`${apiBaseUrl}/${key}`);
+      const { data } = await axios.get(`${apiBaseUrl}/${key}?userId=${userId}`);
       data.timestamp = timestamp;
 
       fs.writeFile(

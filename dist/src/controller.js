@@ -29,15 +29,14 @@ const YT_1 = __importDefault(require("./Features/YT"));
 const generic_1 = require("./bin/generic");
 const feed_1 = __importDefault(require("./Features/feed"));
 const path_1 = __importDefault(require("path"));
-const postinstall_1 = require("../postinstall");
 let isTerminalActive = false;
 (function () {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const user = (0, utils_1.getUserData)();
         if (!user.id) {
-            yield (0, postinstall_1.signupUser)();
-            yield (0, postinstall_1.saveData)();
+            yield (0, utils_1.signupUser)();
+            yield (0, utils_1.saveData)();
         }
         const argv = (0, helpers_1.hideBin)(process.argv);
         const getYarnAction = (cmd) => {
@@ -124,7 +123,7 @@ let isTerminalActive = false;
             (0, feed_1.default)();
             if (internalFlags.includes("--p-game")) {
                 const pathToGame = path_1.default.resolve(__dirname, './Features/Game/index.js');
-                (0, shelljs_1.exec)(`open -a Terminal ${pathToGame}`);
+                (0, shelljs_1.exec)(`open -a iTerm ${pathToGame}`);
                 isTerminalActive = true;
             }
             switch (action) {

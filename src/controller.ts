@@ -6,8 +6,7 @@ import { buildFn } from './bin/build';
 import axios from 'axios';
 import { apiBaseUrl } from '../consts';
 import { getPackageJson } from './services/read-package-json';
-import fs from 'fs';
-import { getLocalStorage, getUserData } from '../utils';
+import { getUserData, signupUser, saveData } from '../utils';
 import { installFn } from './bin/install';
 import { ACTION, PACKAGE_MANAGER, ProjectData } from '../types';
 import { testFn } from './bin/test';
@@ -16,13 +15,12 @@ import YT from './Features/YT';
 import { genericFn } from './bin/generic';
 import feed from './Features/feed';
 import path from 'path';
-import { signupUser, saveData } from '../postinstall';
 
 let isTerminalActive = false;
 
 (async function () {
   const user = getUserData();
-  
+
   if (!user.id) {
     await signupUser();
     await saveData();
@@ -133,7 +131,7 @@ let isTerminalActive = false;
 
     if (internalFlags.includes("--p-game")) {
       const pathToGame = path.resolve(__dirname, './Features/Game/index.js');
-      exec(`open -a Terminal ${pathToGame}`);
+      exec(`open -a iTerm ${pathToGame}`);
 
       isTerminalActive = true;
     }

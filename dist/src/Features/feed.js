@@ -22,7 +22,7 @@ function default_1() {
     return __awaiter(this, void 0, void 0, function* () {
         const argv = new Set((0, helpers_1.hideBin)(process.argv));
         const feed = JSON.parse(yield fs_1.default.readFileSync(`${(0, utils_1.getLocalStorage)()}/feed.json`, 'utf-8'));
-        const { id } = JSON.parse(yield fs_1.default.readFileSync(`${(0, utils_1.getLocalStorage)()}/user.json`, 'utf-8'));
+        const { id } = (0, utils_1.getUserData)();
         const seen = [];
         let called = false;
         const killFeed = () => __awaiter(this, void 0, void 0, function* () {

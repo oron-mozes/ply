@@ -1,6 +1,6 @@
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
-import { getLocalStorage, shouldReFecthData } from '../../utils';
+import { getLocalStorage, getUserData, shouldReFecthData } from '../../utils';
 import { notify } from 'node-notifier';
 import axios from 'axios';
 import { apiBaseUrl } from '../../consts';
@@ -21,19 +21,18 @@ export default async function () {
   } = JSON.parse(
     await fs.readFileSync(`${getLocalStorage()}/feed.json`, 'utf-8')
   );
-  const { id } = JSON.parse(
-    await fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf-8')
-  );
+
+  const { id } = getUserData();
 
   const seen: string[] = [];
   let called = false;
   const killFeed = async () => {
-    if(called) {
+    if (called) {
       return;
     }
-    
+
     const refetchData = shouldReFecthData(feed.timestamp, 3);
-    
+
     called = true;
     if (refetchData) {
       await axios.post(`${apiBaseUrl}/updateFeed`, {
@@ -41,7 +40,7 @@ export default async function () {
         userId: id,
       });
       const { data } = await axios.get(`${apiBaseUrl}/feed`);
-      
+
       data.timestamp = Date.now();
       data.seen = [];
       fs.writeFile(
@@ -62,7 +61,7 @@ export default async function () {
     }
   };
   if (argv.has('--p-feed')) {
-    
+
     for (const feedItem of feed.items.filter(item => !feed.seen?.includes(item.id))) {
       await new Promise((resolve) => {
         seen.push(feedItem.id);
@@ -76,7 +75,7 @@ export default async function () {
             sound: true,
             wait: true,
           },
-          (err, response, metadata) => {}
+          (err, response, metadata) => { }
         );
         setTimeout(resolve, 2000);
       });
@@ -84,6 +83,6 @@ export default async function () {
 
     killFeed();
   }
-  
+
   return killFeed;
 }

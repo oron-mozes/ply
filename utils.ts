@@ -7,10 +7,12 @@ import { homedir } from 'os';
 import { closeTerminalIfNeeded } from './src/controller';
 import { echo, exit } from 'shelljs';
 import chalk from 'chalk';
+import inquirer from 'inquirer';
+import { userInfo } from 'os';
 
 export const getLocalStorage = (): string => `${homedir()}/.ply/local-storage`;
 
-export const getUserData = (): UserData => JSON.parse( fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf8'))
+export const getUserData = (): UserData => JSON.parse(fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf8'))
 
 export function shouldReportError(error: string): boolean {
   const type = error.split(' ').shift() as string;
@@ -101,5 +103,83 @@ export const sendProcessDoneSlackMessage = async (userId: string, projectName: s
     message: `${action.toLowerCase()} process finished on ${projectName}`,
   });
 }
+
+export const saveData = async () => {
+  const keys = ['music', 'feed', 'trivia'];
+  const timestamp = Date.now();
+  const userData = getUserData();
+  const userId = userData.id || '';
+  await Promise.all(
+    keys.map(async (key) => {
+      const { data } = await axios.get(`${apiBaseUrl}/${key}?userId=${userId}`);
+      data.timestamp = timestamp;
+
+      fs.writeFile(
+        `${getLocalStorage()}/${key}.json`,
+        JSON.stringify(data),
+        (err) => {
+          if (err) throw err;
+        }
+      );
+    })
+  );
+};
+
+export const signupUser = async () => {
+  console.clear();
+  console.log(`Welcome To The ${chalk.redBright(chalk.bold("</Sideshow>"))}\n`)
+  const user = userInfo();
+  const { userType } = await inquirer.prompt({
+    name: "userType",
+    message: "Are you signing up to a workspace or as a private user?",
+    choices: ['Private', 'Workspace'],
+    type: "list",
+    prefix: '',
+  });
+
+  let userOrg: string = '';
+  const isAnEmployee = userType === "Workspace";
+
+  if (isAnEmployee) {
+    const { organization } = await inquirer.prompt({
+      name: "organization",
+      message: "Please select a workspace to join",
+      choices: ['WIX', 'Microsoft', 'Floatplane'],
+      type: "list",
+      prefix: '',
+
+    });
+
+    userOrg = organization;
+  }
+
+  const { userEmail } = await inquirer.prompt({
+    name: "userEmail",
+    message: `Please enter an email${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+    type: "input",
+    prefix: '',
+  });
+
+
+  console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
+  if (isAnEmployee) {
+    console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
+  }
+
+  const { data } = await axios.put(`${apiBaseUrl}/user`, {
+    name: user.username,
+    email: userEmail.trim(),
+  });
+
+  fs.writeFile(
+    `${getLocalStorage()}/user.json`,
+    JSON.stringify(data),
+    function (err) {
+      if (err) throw err;
+    }
+  );
+  await new Promise(resolve => setTimeout(resolve, 250))
+};
+
 
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

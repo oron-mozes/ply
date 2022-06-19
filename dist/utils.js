@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sleep = exports.sendProcessDoneSlackMessage = exports.onProcessEnd = exports.shouldReFecthData = exports.reportErrors = exports.reportProcessDuration = exports.shouldReportError = exports.getUserData = exports.getLocalStorage = void 0;
+exports.sleep = exports.signupUser = exports.saveData = exports.sendProcessDoneSlackMessage = exports.onProcessEnd = exports.shouldReFecthData = exports.reportErrors = exports.reportProcessDuration = exports.shouldReportError = exports.getUserData = exports.getLocalStorage = void 0;
 const axios_1 = __importDefault(require("axios"));
 const fs_1 = __importDefault(require("fs"));
 const consts_1 = require("./consts");
@@ -21,6 +21,8 @@ const os_1 = require("os");
 const controller_1 = require("./src/controller");
 const shelljs_1 = require("shelljs");
 const chalk_1 = __importDefault(require("chalk"));
+const inquirer_1 = __importDefault(require("inquirer"));
+const os_2 = require("os");
 const getLocalStorage = () => `${(0, os_1.homedir)()}/.ply/local-storage`;
 exports.getLocalStorage = getLocalStorage;
 const getUserData = () => JSON.parse(fs_1.default.readFileSync(`${(0, exports.getLocalStorage)()}/user.json`, 'utf8'));
@@ -91,5 +93,64 @@ const sendProcessDoneSlackMessage = (userId, projectName, action) => __awaiter(v
     });
 });
 exports.sendProcessDoneSlackMessage = sendProcessDoneSlackMessage;
+const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
+    const keys = ['music', 'feed', 'trivia'];
+    const timestamp = Date.now();
+    const userData = (0, exports.getUserData)();
+    const userId = userData.id || '';
+    yield Promise.all(keys.map((key) => __awaiter(void 0, void 0, void 0, function* () {
+        const { data } = yield axios_1.default.get(`${consts_1.apiBaseUrl}/${key}?userId=${userId}`);
+        data.timestamp = timestamp;
+        fs_1.default.writeFile(`${(0, exports.getLocalStorage)()}/${key}.json`, JSON.stringify(data), (err) => {
+            if (err)
+                throw err;
+        });
+    })));
+});
+exports.saveData = saveData;
+const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
+    console.clear();
+    console.log(`Welcome To The ${chalk_1.default.redBright(chalk_1.default.bold("</Sideshow>"))}\n`);
+    const user = (0, os_2.userInfo)();
+    const { userType } = yield inquirer_1.default.prompt({
+        name: "userType",
+        message: "Are you signing up to a workspace or as a private user?",
+        choices: ['Private', 'Workspace'],
+        type: "list",
+        prefix: '',
+    });
+    let userOrg = '';
+    const isAnEmployee = userType === "Workspace";
+    if (isAnEmployee) {
+        const { organization } = yield inquirer_1.default.prompt({
+            name: "organization",
+            message: "Please select a workspace to join",
+            choices: ['WIX', 'Microsoft', 'Floatplane'],
+            type: "list",
+            prefix: '',
+        });
+        userOrg = organization;
+    }
+    const { userEmail } = yield inquirer_1.default.prompt({
+        name: "userEmail",
+        message: `Please enter an email${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+        type: "input",
+        prefix: '',
+    });
+    console.log(`\n${chalk_1.default.greenBright("Thank you for registering!")}`);
+    if (isAnEmployee) {
+        console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk_1.default.bold("verify your email.")}`);
+    }
+    const { data } = yield axios_1.default.put(`${consts_1.apiBaseUrl}/user`, {
+        name: user.username,
+        email: userEmail.trim(),
+    });
+    fs_1.default.writeFile(`${(0, exports.getLocalStorage)()}/user.json`, JSON.stringify(data), function (err) {
+        if (err)
+            throw err;
+    });
+    yield new Promise(resolve => setTimeout(resolve, 250));
+});
+exports.signupUser = signupUser;
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 exports.sleep = sleep;

@@ -6,6 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initSpeedType = void 0;
 const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const initSpeedType = () => {
     function flagExists(shortFlag, longFlag) {
         return process.argv.indexOf(`-${shortFlag}`) !== process.argv.indexOf(`--${longFlag}`);
@@ -101,10 +102,11 @@ const initSpeedType = () => {
         process.exit();
     }
     function initConfig() {
+        const textFilePath = `${path_1.default.resolve(__dirname, '../../../../')}/speedTypeData/mostCommon1000.txt`;
         return {
             wordsPerLine: argvParser(['-w', '--words'], 9, validateIntArg),
             givenSeconds: argvParser(['-t', '--time'], 60, validateIntArg),
-            inputFile: argvParser(['-i', '--input'], __dirname.replace('/dist/src/Features/Game/', '') + '/speedTypeData/mostCommon1000.txt'),
+            inputFile: argvParser(['-i', '--input'], textFilePath),
             verbose: flagExists('V', 'verbose'),
             debug: flagExists('d', 'debug'),
             savePath: argvParser(['-s', '--save'], false)

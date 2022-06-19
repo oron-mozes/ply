@@ -1,6 +1,8 @@
 #! /usr/bin/env node
 
 import fs from 'fs';
+import { echo } from 'shelljs';
+import path from 'path';
 
 export const initSpeedType = () => {
     function flagExists(shortFlag: any, longFlag: any) {
@@ -117,11 +119,12 @@ export const initSpeedType = () => {
     }
 
     function initConfig() {
-
+        const textFilePath = `${path.resolve(__dirname, '../../../../')}/speedTypeData/mostCommon1000.txt`;
+     
         return {
             wordsPerLine: argvParser(['-w', '--words'], 9, validateIntArg),
             givenSeconds: argvParser(['-t', '--time'], 60, validateIntArg),
-            inputFile: argvParser(['-i', '--input'], __dirname.replace('/dist/src/Features/Game/', '') + '/speedTypeData/mostCommon1000.txt'),
+            inputFile: argvParser(['-i', '--input'], textFilePath),
             verbose: flagExists('V', 'verbose'),
             debug: flagExists('d', 'debug'),
             savePath: argvParser(['-s', '--save'], false)

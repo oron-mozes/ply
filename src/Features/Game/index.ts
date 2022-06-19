@@ -7,6 +7,7 @@ import { initTrivia } from './trivia';
 import { initSpeedType } from './speedType';
 
 export const gameSelectorScreen = async () => {
+  
   const answer = await inquirer.prompt({
     name: "gameSelector",
     message: "Welcome To The </Sideshow>\nWhat are you waiting for?\n",

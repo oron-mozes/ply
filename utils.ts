@@ -33,7 +33,7 @@ export async function reportProcessDuration(
     time: durationInMs,
   });
 
-  echo(chalk.green(`Thanks for helping our dev flow be better.`));
+  echo(`\n${chalk.green(`Thanks for helping our dev flow be better.`)}`);
 }
 
 export async function reportErrors(errors: string[], action: string) {

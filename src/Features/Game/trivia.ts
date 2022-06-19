@@ -42,20 +42,14 @@ const welcome = async () => {
                             ${chalk.blue("INSTRUCTIONS")}
         ==============================================================
         ${chalk.green(
-          "You need to get all answers correct"
-        )} to get to the final prize.
+    "You need to get all answers correct"
+  )} to get to the final prize.
         ${chalk.red("If you get any question wrong")}, you lose...
     `);
 };
 
 const emptyState = async () => {
-
-  const msg = `WELL DONE`;
-
-  figlet(msg, (_err, data) => {
-    console.log(gradient.pastel.multiline(data));
-  });
-
+  echo(`Is seems like there are no more questions for you, probably because you answered all of them.\nOur brilliant team is working on writing new ones.\n${chalk.greenBright('Thank you for your patience!')}`)
   await sleep();
 };
 
@@ -150,7 +144,7 @@ const reportSeenQuestion = async (
       userId,
       bulk: bulk,
     });
-  } catch (error) {}
+  } catch (error) { }
 };
 
 const writeNewSeenQuestion = (

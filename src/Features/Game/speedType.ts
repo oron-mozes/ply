@@ -109,12 +109,6 @@ export const initSpeedType = () => {
     function printStatsAndSendResults() {
         STATS.wpm = Math.round(STATS.corrects / 5 * (60 / CONFIG.givenSeconds));
         STATS.accuracy = Math.round(STATS.corrects / STATS.keypresses * 10000) / 100;
-        const { id } = getUserData();
-
-        axios.post(`${apiBaseUrl}/speedTypeScore`, {
-            userId: id,
-            wpm: STATS.wpm,
-          });
 
         console.log(' '.repeat(79 - 3 - wrote.length) + '│\n' + boxSeparator());
         console.log(boxText('Time\'s up!'));
@@ -246,7 +240,11 @@ export const initSpeedType = () => {
             const { id } = getUserData();
 
             const {avgWpm, bestWpm, firstPlaceUserId, firstPlaceUserEmail} = await (await axios.get(`${apiBaseUrl}/speedTypeScore`)).data.items;
-    
+            await axios.post(`${apiBaseUrl}/speedTypeScore`, {
+                userId: id,
+                wpm: STATS.wpm,
+            });
+
             if (STATS.wpm > bestWpm) {
                 if (id === firstPlaceUserId) {
                     // cungrats - brok your record.

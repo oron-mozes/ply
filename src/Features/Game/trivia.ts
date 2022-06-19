@@ -6,16 +6,13 @@ import gradient from "gradient-string";
 import chalkAnimation from "chalk-animation";
 import figlet from "figlet";
 import fs from "fs";
-import {
-  getLocalStorage,
-  getUserData,
-  shouldReFecthData,
-} from "../../utils";
+;
 import { createSpinner } from "nanospinner";
 import { echo, exec } from "shelljs";
 import { apiBaseUrl } from "../../../consts";
 import axios from "axios";
 import { gameSelectorScreen } from ".";
+import { getLocalStorage, getUserData, shouldReFecthData } from '../../utils';
 
 type Question = {
   _id: string;

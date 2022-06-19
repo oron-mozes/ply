@@ -11,7 +11,8 @@ import chalk from "chalk";
 import fs from 'fs';
 import inquirer from "inquirer";
 import axios from 'axios';
-
+// import rd from 'readline';
+var prompt = inquirer.createPromptModule();
 const user = userInfo();
 
 exec(`mkdir -p ${getLocalStorage()}`);
@@ -45,31 +46,39 @@ const signupUser = async () => {
   //   userOrg = organization;
   // }
 
-  const { userEmail } = await inquirer.prompt({
+  // const { userEmail } = await inquirer.prompt({
+  //   name: "userEmail",
+  //   message: `Please enter an email`,//${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+  //   type: "input",
+  //   prefix: '',
+  // });
+
+  prompt({
     name: "userEmail",
     message: `Please enter an email`,//${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
     type: "input",
     prefix: '',
-  });
-
+  }).then(async (userEmail:any) => {
+    const {data} = await axios.put(`${apiBaseUrl}/user`, {
+      name: user.username,
+      email: userEmail.trim(),
+    });
+  
+    fs.writeFile(
+      `${getLocalStorage()}/user.json`,
+      JSON.stringify(data),
+      function (err) {
+        if (err) throw err;
+      }
+    );
+  })
 
   // console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
   // if (isAnEmployee) {
   //   console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
   // }
 
-  const { data } = await axios.put(`${apiBaseUrl}/user`, {
-    name: user.username,
-    email: userEmail.trim(),
-  });
-
-  fs.writeFile(
-    `${getLocalStorage()}/user.json`,
-    JSON.stringify(data),
-    function (err) {
-      if (err) throw err;
-    }
-  );
+  
 };
 
 const saveData = async () => {

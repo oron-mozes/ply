@@ -91,7 +91,7 @@ function init() {
             let action;
             switch (packageManager) {
                 case types_1.PACKAGE_MANAGER.NONE: {
-                    throw new Error('Package Manager Was Not Entered');
+                    action = types_1.ACTION.GENERIC;
                 }
                 case types_1.PACKAGE_MANAGER.YARN: {
                     action = getYarnAction(cmd);

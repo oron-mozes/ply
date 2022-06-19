@@ -13,7 +13,9 @@ We will send you slack notification and you can always change that by calling:
 ## How to use it?
 Just make sure to call ply before your day to day commands.
 > ply (yarn | npm) install
+
 > ply (yarn | npm) build
+
 > etc'
 
 ## Tired of the waiting game?

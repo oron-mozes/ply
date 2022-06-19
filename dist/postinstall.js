@@ -25,7 +25,6 @@ const fs_1 = __importDefault(require("fs"));
 const inquirer_1 = __importDefault(require("inquirer"));
 const axios_1 = __importDefault(require("axios"));
 const user = (0, os_1.userInfo)();
-(0, shelljs_1.exec)("chmod a+x dist/src/**/*.js");
 (0, shelljs_1.exec)(`mkdir -p ${(0, utils_1.getLocalStorage)()}`);
 const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
     if (fs_1.default.existsSync(`${(0, utils_1.getLocalStorage)()}/user.json`))

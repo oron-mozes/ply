@@ -19,7 +19,7 @@ const user = userInfo();
 exec(`mkdir -p ${getLocalStorage()}`);
 
 const signupUser = async () => {
-  if (fs.existsSync(`${getLocalStorage()}/user.json`)) return;
+  // if (fs.existsSync(`${getLocalStorage()}/user.json`)) return;
 
   console.clear();
   console.log(`Welcome To The ${chalk.redBright(chalk.bold("</Sideshow>"))}\n`)

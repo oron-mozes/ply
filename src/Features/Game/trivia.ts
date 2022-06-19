@@ -49,7 +49,7 @@ const welcome = async () => {
 };
 
 const emptyState = async () => {
-  echo(`Is seems like there are no more questions for you, probably because you answered all of them.\nOur brilliant team is working on writing new ones.\n${chalk.greenBright('Thank you for your patience!')}`)
+  echo(`Is seems like there are no more questions for you, probably because you answered all of them.\nOur brilliant team is working on writing new ones.\n${chalk.greenBright('Thank you for your patience!')}\n`)
   await sleep();
 };
 

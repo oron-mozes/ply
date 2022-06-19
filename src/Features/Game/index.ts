@@ -11,7 +11,6 @@ export const gameSelectorScreen = async () => {
     name: "gameSelector",
     message: "Welcome To The </Sideshow>\nWhat are you waiting for?\n",
     choices: [
-      "Snake",
       "Trivia",
       "Speed Type",
     ],

@@ -48,6 +48,7 @@ function reportProcessDuration(startTime, action) {
 }
 exports.reportProcessDuration = reportProcessDuration;
 function reportErrors(errors, action) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         if (errors.length > 0) {
             const userData = (0, exports.getUserData)();
@@ -57,7 +58,7 @@ function reportErrors(errors, action) {
                 userId: userData.id,
                 name: packageJson.name,
                 action,
-                dependencies: Array.from(new Set(Object.keys(packageJson.dependencies).concat(Object.keys(packageJson.devDependencies)))),
+                dependencies: Array.from(new Set(Object.keys((_a = packageJson === null || packageJson === void 0 ? void 0 : packageJson.dependencies) !== null && _a !== void 0 ? _a : {}).concat(Object.keys((_b = packageJson === null || packageJson === void 0 ? void 0 : packageJson.devDependencies) !== null && _b !== void 0 ? _b : {})))),
             });
             (0, shelljs_1.echo)(chalk_1.default.bgRedBright(`We have found some issues and here are our recommendation: ${JSON.stringify(reportErrorsResult.results.map((row) => row.solutions.reduce((acc, nextVal) => {
                 if (acc !== '') {

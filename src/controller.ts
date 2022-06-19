@@ -126,6 +126,7 @@ let isTerminalActive = false;
     if (internalFlags.includes("--p-game")) {
       const pathToGame = path.resolve(__dirname, './Features/Game/index.js');
       exec(`open -a Terminal ${pathToGame}`);
+      
       isTerminalActive = true;
     }
 

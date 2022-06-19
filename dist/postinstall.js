@@ -72,6 +72,15 @@ const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
     yield new Promise(resolve => setTimeout(resolve, 250));
 });
 exports.signupUser = signupUser;
+const saveFiles = () => {
+    const keys = ['music', 'feed', 'trivia', 'user'];
+    keys.map(key => {
+        fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/${key}.json`, JSON.stringify({}), (err) => {
+            if (err)
+                throw err;
+        });
+    });
+};
 const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
     const keys = ['music', 'feed', 'trivia'];
     const timestamp = Date.now();
@@ -86,4 +95,5 @@ const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
     })));
 });
 // signupUser();
+saveFiles();
 saveData();

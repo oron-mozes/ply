@@ -16,7 +16,8 @@ export const getUserData = (): UserData => JSON.parse(fs.readFileSync(`${getLoca
 
 export function shouldReportError(error: string): boolean {
   const type = error.split(' ').shift() as string;
-  return ['error', 'failed'].includes(type)
+  // console.log('??????????????', type)
+  return ['error', 'failed', 'err'].includes(type.trim().toLowerCase())
 }
 
 export async function reportProcessDuration(

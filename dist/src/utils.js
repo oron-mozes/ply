@@ -29,7 +29,8 @@ const getUserData = () => JSON.parse(fs_1.default.readFileSync(`${(0, exports.ge
 exports.getUserData = getUserData;
 function shouldReportError(error) {
     const type = error.split(' ').shift();
-    return ['error', 'failed'].includes(type);
+    // console.log('??????????????', type)
+    return ['error', 'failed', 'err'].includes(type.trim().toLowerCase());
 }
 exports.shouldReportError = shouldReportError;
 function reportProcessDuration(startTime, action) {

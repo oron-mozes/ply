@@ -204,10 +204,10 @@ export const initTrivia = async () => {
       if (answer) {
         newSeenQuestions.push(question._id);
       }
-      await winningTitle();
-      await reportSeenQuestion(notSeenYetQuestion, newSeenQuestions);
-      writeNewSeenQuestion(questionArray, newSeenQuestions, timestamp);
     }
+    await winningTitle();
+    await reportSeenQuestion(notSeenYetQuestion, newSeenQuestions);
+    writeNewSeenQuestion(questionArray, newSeenQuestions, timestamp);
   }
   reFetchDataIfNeeded(timestamp);
   gameSelectorScreen();

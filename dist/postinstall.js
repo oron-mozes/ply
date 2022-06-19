@@ -31,35 +31,35 @@ const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
         return;
     console.clear();
     console.log(`Welcome To The ${chalk_1.default.redBright(chalk_1.default.bold("</Sideshow>"))}\n`);
-    const { userType } = yield inquirer_1.default.prompt({
-        name: "userType",
-        message: "Are you signing up to a workspace or as a private user?",
-        choices: ['Private', 'Workspace'],
-        type: "list",
-        prefix: '',
-    });
-    let userOrg = '';
-    const isAnEmployee = userType === "Workspace";
-    if (isAnEmployee) {
-        const { organization } = yield inquirer_1.default.prompt({
-            name: "organization",
-            message: "Please select a workspace to join",
-            choices: ['WIX', 'Microsoft', 'Floatplane'],
-            type: "list",
-            prefix: '',
-        });
-        userOrg = organization;
-    }
+    // const { userType } = await inquirer.prompt({
+    //   name: "userType",
+    //   message: "Are you signing up to a workspace or as a private user?",
+    //   choices: ['Private', 'Workspace'],
+    //   type: "list",
+    //   prefix: '',
+    // });
+    // let userOrg: string = '';
+    // const isAnEmployee = userType === "Workspace";
+    // if (isAnEmployee) {
+    //   const { organization } = await inquirer.prompt({
+    //     name: "organization",
+    //     message: "Please select a workspace to join",
+    //     choices: ['WIX', 'Microsoft', 'Floatplane'],
+    //     type: "list",
+    //     prefix: '',
+    //   });
+    //   userOrg = organization;
+    // }
     const { userEmail } = yield inquirer_1.default.prompt({
         name: "userEmail",
-        message: `Please enter an email${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+        message: `Please enter an email`,
         type: "input",
         prefix: '',
     });
-    console.log(`\n${chalk_1.default.greenBright("Thank you for registering!")}`);
-    if (isAnEmployee) {
-        console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk_1.default.bold("verify your email.")}`);
-    }
+    // console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
+    // if (isAnEmployee) {
+    //   console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
+    // }
     const { data } = yield axios_1.default.put(`${consts_1.apiBaseUrl}/user`, {
         name: user.username,
         email: userEmail.trim(),
@@ -82,5 +82,5 @@ const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
         });
     })));
 });
-// signupUser();
+signupUser();
 saveData();

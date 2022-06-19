@@ -21,42 +21,42 @@ const signupUser = async () => {
 
   console.clear();
   console.log(`Welcome To The ${chalk.redBright(chalk.bold("</Sideshow>"))}\n`)
-  const { userType } = await inquirer.prompt({
-    name: "userType",
-    message: "Are you signing up to a workspace or as a private user?",
-    choices: ['Private', 'Workspace'],
-    type: "list",
-    prefix: '',
-  });
+  // const { userType } = await inquirer.prompt({
+  //   name: "userType",
+  //   message: "Are you signing up to a workspace or as a private user?",
+  //   choices: ['Private', 'Workspace'],
+  //   type: "list",
+  //   prefix: '',
+  // });
 
-  let userOrg: string = '';
-  const isAnEmployee = userType === "Workspace";
+  // let userOrg: string = '';
+  // const isAnEmployee = userType === "Workspace";
 
-  if (isAnEmployee) {
-    const { organization } = await inquirer.prompt({
-      name: "organization",
-      message: "Please select a workspace to join",
-      choices: ['WIX', 'Microsoft', 'Floatplane'],
-      type: "list",
-      prefix: '',
+  // if (isAnEmployee) {
+  //   const { organization } = await inquirer.prompt({
+  //     name: "organization",
+  //     message: "Please select a workspace to join",
+  //     choices: ['WIX', 'Microsoft', 'Floatplane'],
+  //     type: "list",
+  //     prefix: '',
 
-    });
+  //   });
 
-    userOrg = organization;
-  }
+  //   userOrg = organization;
+  // }
 
   const { userEmail } = await inquirer.prompt({
     name: "userEmail",
-    message: `Please enter an email${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
+    message: `Please enter an email`,//${isAnEmployee ? ` (Must be a valid ${userOrg} email)` : ''}:`,
     type: "input",
     prefix: '',
   });
 
 
-  console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
-  if (isAnEmployee) {
-    console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
-  }
+  // console.log(`\n${chalk.greenBright("Thank you for registering!")}`);
+  // if (isAnEmployee) {
+  //   console.log(`Please note you will not be presented with ${userOrg} related content until you ${chalk.bold("verify your email.")}`);
+  // }
 
   const { data } = await axios.put(`${apiBaseUrl}/user`, {
     name: user.username,
@@ -92,5 +92,5 @@ const saveData = async () => {
   );
 };
 
-// signupUser();
+signupUser();
 saveData();

@@ -3,8 +3,10 @@
 
 ## Installation
 During installation you will be asked to enter your email address.
-...We do not use the email in any way other then registration in our system.
-...We will send you slack notification and you can always change that by calling:
+
+We do not use the email in any way other then registration in our system.
+
+We will send you slack notification and you can always change that by calling:
 ``` 
   $ply config
 ```
@@ -17,7 +19,8 @@ Just make sure to call ply before your day to day commands.
 
 ## Tired of the waiting game?
 Your process takes a long time? we've got your back.
-...You can use any of our commands to make your down time fun.
+You can use any of our commands to make your down time fun.
+
 | command        | Fun           |   |
 | ------------- |:-------------:| -----:|
 | --p-game     | Terminal games |  You can play one of our games and be in our score board lead: "Snake", "Trivia" or "Fast Type" |

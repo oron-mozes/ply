@@ -51,8 +51,8 @@ export async function reportErrors(errors: string[], action: string) {
         action,
         dependencies: Array.from(
           new Set(
-            Object.keys(packageJson.dependencies).concat(
-              Object.keys(packageJson.devDependencies)
+            Object.keys(packageJson?.dependencies ?? {}).concat(
+              Object.keys(packageJson?.devDependencies ?? {})
             )
           )
         ),

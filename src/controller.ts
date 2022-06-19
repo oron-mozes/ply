@@ -132,10 +132,10 @@ async function init() {
     feed();
 
     if (internalFlags.includes("--p-game")) {
-      echo(`path  is: ${__dirname}/Features/Game/**/*.js`);
-      exec(`chmod a+x ${__dirname}/Features/Game/**/*.js`);
+      // echo(`path  is: ${__dirname}/Features/Game/**/*.js`);
+      exec(`chmod a+x ${__dirname}/Features/Game/*.js`);
       const pathToGame = path.resolve(__dirname, './Features/Game/index.js');
-      echo(`path  for game: ${__dirname}/Features/Game/**/*.js`);
+      echo(`path  for game: ${__dirname}/Features/Game/*.js`);
       exec(`open -a iTerm ${pathToGame}`);
 
       isTerminalActive = true;

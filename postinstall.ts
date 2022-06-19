@@ -63,7 +63,7 @@ export const signupUser = async () => {
     email: userEmail.trim(),
   });
 
-   fs.writeFile(
+  fs.writeFile(
     `${getLocalStorage()}/user.json`,
     JSON.stringify(data),
     function (err) {
@@ -72,6 +72,19 @@ export const signupUser = async () => {
   );
   await new Promise(resolve => setTimeout(resolve, 250))
 };
+
+const saveFiles = () => {
+  const keys = ['music', 'feed', 'trivia', 'user'];
+  keys.map(key => {
+    fs.writeFile(
+      `${getLocalStorage()}/${key}.json`,
+      JSON.stringify({}),
+      (err) => {
+        if (err) throw err;
+      }
+    );
+  })
+}
 
 const saveData = async () => {
   const keys = ['music', 'feed', 'trivia'];
@@ -94,4 +107,5 @@ const saveData = async () => {
 };
 
 // signupUser();
+saveFiles();
 saveData();

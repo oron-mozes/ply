@@ -89,7 +89,8 @@ const saveFiles = () => {
 const saveData = async () => {
   const keys = ['music', 'feed', 'trivia'];
   const timestamp = Date.now();
-  const { id: userId } = getUserData();
+  const userData = getUserData();
+  const userId = userData.id || '';
   await Promise.all(
     keys.map(async (key) => {
       const { data } = await axios.get(`${apiBaseUrl}/${key}?userId=${userId}`);

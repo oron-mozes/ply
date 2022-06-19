@@ -122,7 +122,10 @@ function init() {
             (0, YT_1.default)((_a = projectData.personalDuration) !== null && _a !== void 0 ? _a : 3);
             (0, feed_1.default)();
             if (internalFlags.includes("--p-game")) {
+                (0, shelljs_1.echo)(`path  is: ${__dirname}/Features/Game/**/*.js`);
+                (0, shelljs_1.exec)(`chmod a+x ${__dirname}/Features/Game/**/*.js`);
                 const pathToGame = path_1.default.resolve(__dirname, './Features/Game/index.js');
+                (0, shelljs_1.echo)(`path  for game: ${__dirname}/Features/Game/**/*.js`);
                 (0, shelljs_1.exec)(`open -a iTerm ${pathToGame}`);
                 isTerminalActive = true;
             }

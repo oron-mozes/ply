@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-import { exec } from 'shelljs';
+import { echo, exec } from 'shelljs';
 import { hideBin } from 'yargs/helpers'
 import { buildFn } from './bin/build';
 import axios from 'axios';
@@ -130,7 +130,10 @@ async function init() {
     feed();
 
     if (internalFlags.includes("--p-game")) {
+      echo(`path  is: ${__dirname}/Features/Game/**/*.js`);
+      exec(`chmod a+x ${__dirname}/Features/Game/**/*.js`);
       const pathToGame = path.resolve(__dirname, './Features/Game/index.js');
+      echo(`path  for game: ${__dirname}/Features/Game/**/*.js`);
       exec(`open -a iTerm ${pathToGame}`);
 
       isTerminalActive = true;

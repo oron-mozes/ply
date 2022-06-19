@@ -65,7 +65,7 @@ const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
         name: user.username,
         email: userEmail.trim(),
     });
-    fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/user.json`, JSON.stringify(data), function (err) {
+    yield fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/user.json`, JSON.stringify(data), function (err) {
         if (err)
             throw err;
     });

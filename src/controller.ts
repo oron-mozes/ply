@@ -7,7 +7,7 @@ import axios from 'axios';
 import { apiBaseUrl } from '../consts';
 import { getPackageJson } from './services/read-package-json';
 import fs from 'fs';
-import { getLocalStorage } from '../utils';
+import { getLocalStorage, getUserData } from '../utils';
 import { installFn } from './bin/install';
 import { ACTION, PACKAGE_MANAGER, ProjectData } from '../types';
 import { testFn } from './bin/test';
@@ -119,7 +119,7 @@ let isTerminalActive = false;
     const { internalFlags, executionCommand, packageManager, action } = interpretCommand(argv);
     const executionProcess = exec(executionCommand, { async: true });
     const pkg = getPackageJson();
-    const user = JSON.parse(fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf-8'));
+    const user = getUserData();
     const { data: projectData }: { data: ProjectData } = await axios.get(`${apiBaseUrl}/project?name=${pkg.name}&userId=${user.id}&action=${action}`)
 
     YT(projectData.personalDuration ?? 3);

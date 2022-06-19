@@ -20,7 +20,7 @@ function default_1(duration = 3) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         const argv = new Set((0, helpers_1.hideBin)(process.argv));
-        if (argv.has('--p-play')) {
+        if (argv.has('--p-music')) {
             const list = JSON.parse(yield fs_1.default.readFileSync(`${(0, utils_1.getLocalStorage)()}/music.json`, 'utf-8'));
             const relevantSongs = list.playlist.filter(item => item.duration <= (duration / 1000));
             const song = Math.round(Math.random() * relevantSongs.length);

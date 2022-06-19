@@ -6,9 +6,7 @@ import { initSnake } from './snake';
 import { initTrivia } from './trivia';
 import { initSpeedType } from './speedType';
 
-(async function () {
-  exec('osascript -e \'tell application "System Events" to keystroke "f" using {control down, command down}\'');
-  exec("clear");
+export const gameSelectorScreen = async () => {
   const answer = await inquirer.prompt({
     name: "gameSelector",
     message: "Welcome To The </Sideshow>\nWhat are you waiting for?\n",
@@ -39,4 +37,10 @@ import { initSpeedType } from './speedType';
       break;
     }
   }
+}
+
+(async function () {
+  // exec('osascript -e \'tell application "System Events" to keystroke "f" using {control down, command down}\'');
+  exec("clear");
+  gameSelectorScreen()
 })()

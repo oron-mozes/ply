@@ -82,5 +82,5 @@ const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
         });
     })));
 });
-signupUser();
+// signupUser();
 saveData();

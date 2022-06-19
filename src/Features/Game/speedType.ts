@@ -121,7 +121,7 @@ export const initSpeedType = () => {
         return {
             wordsPerLine: argvParser(['-w', '--words'], 9, validateIntArg),
             givenSeconds: argvParser(['-t', '--time'], 60, validateIntArg),
-            inputFile: argvParser(['-i', '--input'], __dirname.replace('/dist/src', '') + '/speedTypeData/mostCommon1000.txt'),
+            inputFile: argvParser(['-i', '--input'], __dirname.replace('/dist/src/Features/Game/', '') + '/speedTypeData/mostCommon1000.txt'),
             verbose: flagExists('V', 'verbose'),
             debug: flagExists('d', 'debug'),
             savePath: argvParser(['-s', '--save'], false)

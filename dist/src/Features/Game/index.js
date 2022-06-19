@@ -26,7 +26,7 @@ const gameSelectorScreen = () => __awaiter(void 0, void 0, void 0, function* () 
         choices: [
             "Trivia",
             "Speed Type",
-            "exit"
+            "Exit"
         ],
         type: "list",
         prefix: '',
@@ -45,7 +45,7 @@ const gameSelectorScreen = () => __awaiter(void 0, void 0, void 0, function* () 
             (0, speedType_1.initSpeedType)();
             break;
         }
-        case "exit": {
+        case "Exit": {
             process.exit();
             break;
         }

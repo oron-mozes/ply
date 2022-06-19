@@ -120,8 +120,6 @@ let isTerminalActive = false;
     const user = JSON.parse(fs.readFileSync(`${getLocalStorage()}/user.json`, 'utf-8'));
     const { data: projectData }: { data: ProjectData } = await axios.get(`${apiBaseUrl}/project?name=${pkg.name}&userId=${user.id}&action=${action}`)
 
-    echo(JSON.stringify(argv))
-
     YT(projectData.personalDuration ?? 3);
     feed();
 

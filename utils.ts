@@ -61,14 +61,14 @@ export async function reportErrors(errors: string[], action: string) {
     echo(
       chalk.bgRedBright(
         `We have found some issues and here are our recommendation: ${JSON.stringify(
-          reportErrorsResult.results.map((row:any) => row.solutions.reduce((acc:string, nextVal:string) => {
+          reportErrorsResult.results.map((row: any) => row.solutions.reduce((acc: string, nextVal: string) => {
             if (acc !== '') {
               acc += ' | ';
             }
             acc += nextVal;
             return acc;
           }, '')
-        ))}`
+          ))}`
       )
     );
   }
@@ -86,8 +86,19 @@ export const onProcessEnd = async (
   action: ACTION,
   errors: string[]
 ) => {
+  const userData = getUserData();
+  const packageJson = getPackageJson();
+
   await reportProcessDuration(startTime, action);
   await reportErrors(errors, action);
+  await sendProcessDoneSlackMessage(userData.id, packageJson.name, action);
   closeTerminalIfNeeded();
   exit(1);
 };
+
+export const sendProcessDoneSlackMessage = async (userId: string, projectName: string, action: ACTION) => {
+  await axios.post(`${apiBaseUrl}/sendSlackDirectMessage`, {
+    userId,
+    message: `${action.toLowerCase()} process finished on ${projectName}`,
+  });
+}

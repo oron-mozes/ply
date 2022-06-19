@@ -1,5 +1,14 @@
 #! /usr/bin/env node
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -7,6 +16,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.initSpeedType = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const _1 = require(".");
+const inquirer_1 = __importDefault(require("inquirer"));
+const axios_1 = __importDefault(require("axios"));
+const consts_1 = require("../../../consts");
+const services_1 = require("../../services");
+const chalk_1 = __importDefault(require("chalk"));
 const initSpeedType = () => {
     function flagExists(shortFlag, longFlag) {
         return process.argv.indexOf(`-${shortFlag}`) !== process.argv.indexOf(`--${longFlag}`);
@@ -85,12 +100,14 @@ const initSpeedType = () => {
         stdout.write(boxTop() + '\n' + boxText(results + text.substring(cursor)) + '\n' + boxText(nextText) + '\n\n│ ' + wrote);
         boxDrawIsLocked = false;
     }
-    function printStats() {
+    function printStatsAndSendResults() {
         STATS.wpm = Math.round(STATS.corrects / 5 * (60 / CONFIG.givenSeconds));
         STATS.accuracy = Math.round(STATS.corrects / STATS.keypresses * 10000) / 100;
-        if (CONFIG.savePath) {
-            saveStats(STATS, CONFIG);
-        }
+        const { id } = (0, services_1.getUserData)();
+        axios_1.default.post(`${consts_1.apiBaseUrl}/speedTypeScore`, {
+            userId: id,
+            wpm: STATS.wpm,
+        });
         console.log(' '.repeat(79 - 3 - wrote.length) + '│\n' + boxSeparator());
         console.log(boxText('Time\'s up!'));
         console.log(boxText(`WPM: ${STATS.wpm}`));
@@ -99,13 +116,12 @@ const initSpeedType = () => {
         console.log(boxText(`Wrong keystrokes: ${STATS.errors}`));
         console.log(boxText(`Accuracy: ${STATS.accuracy}%`));
         console.log(boxBottom());
-        process.exit();
     }
     function initConfig() {
         const textFilePath = `${path_1.default.resolve(__dirname, '../../../../')}/speedTypeData/mostCommon1000.txt`;
         return {
             wordsPerLine: argvParser(['-w', '--words'], 9, validateIntArg),
-            givenSeconds: argvParser(['-t', '--time'], 60, validateIntArg),
+            givenSeconds: argvParser(['-t', '--time'], 45, validateIntArg),
             inputFile: argvParser(['-i', '--input'], textFilePath),
             verbose: flagExists('V', 'verbose'),
             debug: flagExists('d', 'debug'),
@@ -205,7 +221,43 @@ const initSpeedType = () => {
         fs_1.default.appendFileSync(config.savePath, data);
     }
     function start() {
-        setTimeout(printStats, CONFIG.givenSeconds * 1000);
+        setTimeout(() => __awaiter(this, void 0, void 0, function* () {
+            printStatsAndSendResults();
+            boxDrawIsLocked = true;
+            const { id } = (0, services_1.getUserData)();
+            const { avgWpm, bestWpm, firstPlaceUserId, firstPlaceUserEmail } = yield (yield axios_1.default.get(`${consts_1.apiBaseUrl}/speedTypeScore`)).data.items;
+            if (STATS.wpm > bestWpm) {
+                if (id === firstPlaceUserId) {
+                    // cungrats - brok your record.
+                    console.log(`Congratulations! you broke your previous record of ${chalk_1.default.greenBright(`${bestWpm} WPM`)}\nand you are still ${chalk_1.default.bold(chalk_1.default.greenBright('leading the board'))}`);
+                }
+                else {
+                    // cungrats - new leader.
+                    console.log(`Congratulations! ${chalk_1.default.bold(chalk_1.default.greenBright('you overtook the throne!'))}\nYou have beaten ${chalk_1.default.redBright(firstPlaceUserEmail)}\'s previous record of ${chalk_1.default.redBright(`${bestWpm} WPM`)}\nThe new score is ${chalk_1.default.greenBright.bold(`${STATS.wpm} WPM`)}`);
+                }
+            }
+            else if (STATS.wpm > avgWpm) {
+                // better then most users
+                console.log(`Doing great! you passed the average of ${chalk_1.default.greenBright(`${avgWpm} WPM`)}\nBut still need to do better to pass ${chalk_1.default.yellowBright(firstPlaceUserEmail)}\'s record of ${chalk_1.default.yellowBright(`${bestWpm} WPM`)}`);
+            }
+            else {
+                // get some practice :) run it again.
+                console.log(`Nice try! but you need to ${chalk_1.default.redBright('warm up')} to at least pass the average ${chalk_1.default.yellowBright(`${avgWpm} WPM`)}\nAnd have a lot to go to pass ${chalk_1.default.yellowBright(firstPlaceUserEmail)}\'s record of ${chalk_1.default.yellowBright(`${bestWpm} WPM`)}`);
+            }
+            const answer = yield inquirer_1.default.prompt({
+                name: 'rematch',
+                message: 'Do you want to ply another game?',
+                choices: ['YES', 'NO'],
+                type: "list",
+            });
+            console.clear();
+            if (answer.rematch === 'NO') {
+                (0, _1.gameSelectorScreen)();
+            }
+            else {
+                (0, exports.initSpeedType)();
+            }
+        }), CONFIG.givenSeconds * 1000);
         setInterval(drawBox, 250);
         startTime = Date.now();
         started = true;

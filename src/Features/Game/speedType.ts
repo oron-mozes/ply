@@ -3,6 +3,12 @@
 import fs from 'fs';
 import { echo } from 'shelljs';
 import path from 'path';
+import { gameSelectorScreen } from '.';
+import inquirer from 'inquirer';
+import axios from 'axios';
+import { apiBaseUrl } from '../../../consts';
+import { getUserData } from '../../services';
+import chalk from 'chalk';
 
 export const initSpeedType = () => {
     function flagExists(shortFlag: any, longFlag: any) {
@@ -100,12 +106,15 @@ export const initSpeedType = () => {
         boxDrawIsLocked = false;
     }
 
-    function printStats() {
+    function printStatsAndSendResults() {
         STATS.wpm = Math.round(STATS.corrects / 5 * (60 / CONFIG.givenSeconds));
         STATS.accuracy = Math.round(STATS.corrects / STATS.keypresses * 10000) / 100;
-        if (CONFIG.savePath) {
-            saveStats(STATS, CONFIG);
-        }
+        const { id } = getUserData();
+
+        axios.post(`${apiBaseUrl}/speedTypeScore`, {
+            userId: id,
+            wpm: STATS.wpm,
+          });
 
         console.log(' '.repeat(79 - 3 - wrote.length) + '│\n' + boxSeparator());
         console.log(boxText('Time\'s up!'));
@@ -115,7 +124,6 @@ export const initSpeedType = () => {
         console.log(boxText(`Wrong keystrokes: ${STATS.errors}`));
         console.log(boxText(`Accuracy: ${STATS.accuracy}%`));
         console.log(boxBottom());
-        process.exit();
     }
 
     function initConfig() {
@@ -123,7 +131,7 @@ export const initSpeedType = () => {
      
         return {
             wordsPerLine: argvParser(['-w', '--words'], 9, validateIntArg),
-            givenSeconds: argvParser(['-t', '--time'], 60, validateIntArg),
+            givenSeconds: argvParser(['-t', '--time'], 45, validateIntArg),
             inputFile: argvParser(['-i', '--input'], textFilePath),
             verbose: flagExists('V', 'verbose'),
             debug: flagExists('d', 'debug'),
@@ -232,7 +240,42 @@ export const initSpeedType = () => {
     }
 
     function start() {
-        setTimeout(printStats, CONFIG.givenSeconds * 1000);
+        setTimeout(async () => {
+            printStatsAndSendResults();
+            boxDrawIsLocked = true;
+            const { id } = getUserData();
+
+            const {avgWpm, bestWpm, firstPlaceUserId, firstPlaceUserEmail} = await (await axios.get(`${apiBaseUrl}/speedTypeScore`)).data.items;
+    
+            if (STATS.wpm > bestWpm) {
+                if (id === firstPlaceUserId) {
+                    // cungrats - brok your record.
+                    console.log(`Congratulations! you broke your previous record of ${chalk.greenBright(`${bestWpm} WPM`)}\nand you are still ${chalk.bold(chalk.greenBright('leading the board'))}`)
+                } else {
+                    // cungrats - new leader.
+                    console.log(`Congratulations! ${chalk.bold(chalk.greenBright('you overtook the throne!'))}\nYou have beaten ${chalk.redBright(firstPlaceUserEmail)}\'s previous record of ${chalk.redBright(`${bestWpm} WPM`)}\nThe new score is ${chalk.greenBright.bold(`${STATS.wpm} WPM`)}`)
+                }
+            } else if (STATS.wpm > avgWpm) {
+                // better then most users
+                console.log(`Doing great! you passed the average of ${chalk.greenBright(`${avgWpm} WPM`)}\nBut still need to do better to pass ${chalk.yellowBright(firstPlaceUserEmail)}\'s record of ${chalk.yellowBright(`${bestWpm} WPM`)}`)
+            } else {
+                // get some practice :) run it again.
+                console.log(`Nice try! but you need to ${chalk.redBright('warm up')} to at least pass the average ${chalk.yellowBright(`${avgWpm} WPM`)}\nAnd have a lot to go to pass ${chalk.yellowBright(firstPlaceUserEmail)}\'s record of ${chalk.yellowBright(`${bestWpm} WPM`)}`)
+            }
+            
+            const answer = await inquirer.prompt({
+                name: 'rematch',
+                message: 'Do you want to ply another game?',
+                choices: ['YES', 'NO'],
+                type: "list",
+              });
+              console.clear();
+              if (answer.rematch === 'NO') {
+                  gameSelectorScreen();
+              } else {
+                initSpeedType()
+              }
+        }, CONFIG.givenSeconds * 1000);
         setInterval(drawBox, 250);
         startTime = Date.now();
         started = true;

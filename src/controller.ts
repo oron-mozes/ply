@@ -96,7 +96,7 @@ async function init() {
 
     switch (packageManager) {
       case PACKAGE_MANAGER.NONE: {
-        throw new Error('Package Manager Was Not Entered');
+        action = ACTION.GENERIC;
       }
 
       case PACKAGE_MANAGER.YARN: {

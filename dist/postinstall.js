@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signupUser = void 0;
+exports.saveData = exports.signupUser = void 0;
 const shelljs_1 = require("shelljs");
 const os_1 = require("os");
 const consts_1 = require("./consts");
@@ -26,10 +26,9 @@ const fs_1 = __importDefault(require("fs"));
 const inquirer_1 = __importDefault(require("inquirer"));
 const axios_1 = __importDefault(require("axios"));
 const user = (0, os_1.userInfo)();
+(0, shelljs_1.exec)("chmod a+x dist/src/**/*.js");
 (0, shelljs_1.exec)(`mkdir -p ${(0, utils_1.getLocalStorage)()}`);
 const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
-    if (fs_1.default.existsSync(`${(0, utils_1.getLocalStorage)()}/user.json`))
-        return;
     console.clear();
     console.log(`Welcome To The ${chalk_1.default.redBright(chalk_1.default.bold("</Sideshow>"))}\n`);
     const { userType } = yield inquirer_1.default.prompt({
@@ -72,19 +71,14 @@ const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
     yield new Promise(resolve => setTimeout(resolve, 250));
 });
 exports.signupUser = signupUser;
-const saveFiles = () => {
-    const keys = ['music', 'feed', 'trivia', 'user'];
-    keys.map(key => {
-        fs_1.default.writeFile(`${(0, utils_1.getLocalStorage)()}/${key}.json`, JSON.stringify({}), (err) => {
-            if (err)
-                throw err;
-        });
-    });
+const saveUserFile = () => {
+    fs_1.default.writeFileSync(`${(0, utils_1.getLocalStorage)()}/user.json`, JSON.stringify({ "id": '' }));
 };
 const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
     const keys = ['music', 'feed', 'trivia'];
     const timestamp = Date.now();
-    const { id: userId } = (0, utils_1.getUserData)();
+    const userData = (0, utils_1.getUserData)();
+    const userId = userData.id || '';
     yield Promise.all(keys.map((key) => __awaiter(void 0, void 0, void 0, function* () {
         const { data } = yield axios_1.default.get(`${consts_1.apiBaseUrl}/${key}?userId=${userId}`);
         data.timestamp = timestamp;
@@ -94,6 +88,5 @@ const saveData = () => __awaiter(void 0, void 0, void 0, function* () {
         });
     })));
 });
-// signupUser();
-saveFiles();
-saveData();
+exports.saveData = saveData;
+saveUserFile();

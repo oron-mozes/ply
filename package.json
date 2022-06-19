@@ -1,12 +1,12 @@
 {
   "name": "ply-cli",
-  "version": "1.0.19",
+  "version": "1.0.25",
   "description": "\"Ply-cli\" is a cli tool that aim to entertain you while you wait for any process to be over.",
   "main": "index.js",
   "scripts": {
     "build": "tsc; chmod a+x dist/**/*.js ; chmod a+x dist/src/**/*.js",
     "release": "npm publish --access public",
-    "postinstall": "node ./dist/postinstall.js"
+    "postinstall": "chmod a+x dist/src/**/*.js && node ./dist/postinstall.js"
   },
   "bin": {
     "ply": "./dist/src/controller.js"
@@ -43,7 +43,5 @@
     "inquirer": "^8.2.0",
     "nanospinner": "^1.0.0"
   },
-  "devDependencies": {
-    
-  }
+  "devDependencies": {}
 }

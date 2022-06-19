@@ -101,3 +101,5 @@ export const sendProcessDoneSlackMessage = async (userId: string, projectName: s
     message: `${action.toLowerCase()} process finished on ${projectName}`,
   });
 }
+
+export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

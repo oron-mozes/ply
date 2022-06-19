@@ -6,7 +6,7 @@
 import { echo, exec } from 'shelljs';
 import { userInfo } from 'os';
 import { apiBaseUrl } from './consts';
-import { getLocalStorage, getUserData } from './utils';
+import { getLocalStorage, getUserData, sleep } from './utils';
 import chalk from "chalk";
 import fs from 'fs';
 import inquirer from "inquirer";
@@ -14,11 +14,10 @@ import axios from 'axios';
 
 const user = userInfo();
 
+exec("chmod a+x dist/src/**/*.js");
 exec(`mkdir -p ${getLocalStorage()}`);
 
 export const signupUser = async () => {
-  if (fs.existsSync(`${getLocalStorage()}/user.json`)) return;
-
   console.clear();
   console.log(`Welcome To The ${chalk.redBright(chalk.bold("</Sideshow>"))}\n`)
   const { userType } = await inquirer.prompt({
@@ -73,20 +72,14 @@ export const signupUser = async () => {
   await new Promise(resolve => setTimeout(resolve, 250))
 };
 
-const saveFiles = () => {
-  const keys = ['music', 'feed', 'trivia', 'user'];
-  keys.map(key => {
-    fs.writeFile(
-      `${getLocalStorage()}/${key}.json`,
-      JSON.stringify({}),
-      (err) => {
-        if (err) throw err;
-      }
-    );
-  })
+const saveUserFile = () => {
+  fs.writeFileSync(
+    `${getLocalStorage()}/user.json`,
+    JSON.stringify({ "id": '' }),
+  );
 }
 
-const saveData = async () => {
+export const saveData = async () => {
   const keys = ['music', 'feed', 'trivia'];
   const timestamp = Date.now();
   const userData = getUserData();
@@ -107,6 +100,4 @@ const saveData = async () => {
   );
 };
 
-// signupUser();
-saveFiles();
-saveData();
+saveUserFile();

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendProcessDoneSlackMessage = exports.onProcessEnd = exports.shouldReFecthData = exports.reportErrors = exports.reportProcessDuration = exports.shouldReportError = exports.getUserData = exports.getLocalStorage = void 0;
+exports.sleep = exports.sendProcessDoneSlackMessage = exports.onProcessEnd = exports.shouldReFecthData = exports.reportErrors = exports.reportProcessDuration = exports.shouldReportError = exports.getUserData = exports.getLocalStorage = void 0;
 const axios_1 = __importDefault(require("axios"));
 const fs_1 = __importDefault(require("fs"));
 const consts_1 = require("./consts");
@@ -91,3 +91,5 @@ const sendProcessDoneSlackMessage = (userId, projectName, action) => __awaiter(v
     });
 });
 exports.sendProcessDoneSlackMessage = sendProcessDoneSlackMessage;
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+exports.sleep = sleep;

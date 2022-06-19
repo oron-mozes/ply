@@ -16,12 +16,18 @@ import YT from './Features/YT';
 import { genericFn } from './bin/generic';
 import feed from './Features/feed';
 import path from 'path';
-import { signupUser } from '../postinstall';
+import { signupUser, saveData } from '../postinstall';
 
 let isTerminalActive = false;
 
 (async function () {
-  await signupUser();
+  const user = getUserData();
+  
+  if (!user.id) {
+    await signupUser();
+    await saveData();
+  }
+
   const argv = hideBin(process.argv);
 
   const getYarnAction = (cmd: string[]): ACTION => {
@@ -128,7 +134,7 @@ let isTerminalActive = false;
     if (internalFlags.includes("--p-game")) {
       const pathToGame = path.resolve(__dirname, './Features/Game/index.js');
       exec(`open -a Terminal ${pathToGame}`);
-      
+
       isTerminalActive = true;
     }
 

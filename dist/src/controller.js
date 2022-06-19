@@ -34,7 +34,11 @@ let isTerminalActive = false;
 (function () {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        yield (0, postinstall_1.signupUser)();
+        const user = (0, utils_1.getUserData)();
+        if (!user.id) {
+            yield (0, postinstall_1.signupUser)();
+            yield (0, postinstall_1.saveData)();
+        }
         const argv = (0, helpers_1.hideBin)(process.argv);
         const getYarnAction = (cmd) => {
             if (cmd.length === 1) {

@@ -14,7 +14,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildFn = void 0;
-const utils_1 = require("../../utils");
+const utils_1 = require("../utils");
 const types_1 = require("../../types");
 const buildFn = ({ executionProcess, startTime }) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;

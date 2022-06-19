@@ -17,7 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.installFn = void 0;
-const utils_1 = require("../../utils");
+const utils_1 = require("../utils");
 const types_1 = require("../../types");
 const shelljs_1 = require("shelljs");
 const chalk_1 = __importDefault(require("chalk"));

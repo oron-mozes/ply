@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const helpers_1 = require("yargs/helpers");
 const fs_1 = __importDefault(require("fs"));
-const utils_1 = require("../../utils");
+const utils_1 = require("../utils");
 const node_notifier_1 = require("node-notifier");
 const axios_1 = __importDefault(require("axios"));
 const consts_1 = require("../../consts");

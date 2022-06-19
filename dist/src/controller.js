@@ -20,7 +20,7 @@ const build_1 = require("./bin/build");
 const axios_1 = __importDefault(require("axios"));
 const consts_1 = require("../consts");
 const read_package_json_1 = require("./services/read-package-json");
-const utils_1 = require("../utils");
+const utils_1 = require("./utils");
 const install_1 = require("./bin/install");
 const types_1 = require("../types");
 const test_1 = require("./bin/test");
@@ -30,7 +30,7 @@ const generic_1 = require("./bin/generic");
 const feed_1 = __importDefault(require("./Features/feed"));
 const path_1 = __importDefault(require("path"));
 let isTerminalActive = false;
-(function () {
+function init() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const user = (0, utils_1.getUserData)();
@@ -146,7 +146,9 @@ let isTerminalActive = false;
         }
         ;
     });
-})();
+}
+;
+init();
 const closeTerminalIfNeeded = () => {
     if (isTerminalActive) {
         (0, shelljs_1.exec)('osascript -e \'tell application "Terminal" to close first window\'');

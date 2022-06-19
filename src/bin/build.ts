@@ -4,7 +4,7 @@
 //https://www.npmjs.com/package/os
 
 import { ChildProcess } from 'child_process';
-import { onProcessEnd, shouldReportError } from '../../utils';
+import { onProcessEnd, shouldReportError } from '../utils';
 import { ACTION } from '../../types';
 import { echo } from 'shelljs';
 import chalk from 'chalk';

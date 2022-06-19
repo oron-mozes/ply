@@ -10,7 +10,7 @@ import {
   getLocalStorage,
   getUserData,
   shouldReFecthData,
-} from "../../../utils";
+} from "../../utils";
 import { createSpinner } from "nanospinner";
 import { echo, exec } from "shelljs";
 import { apiBaseUrl } from "../../../consts";

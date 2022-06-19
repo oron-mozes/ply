@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const yt_play_cli_1 = __importDefault(require("yt-play-cli"));
 const fs_1 = __importDefault(require("fs"));
-const utils_1 = require("../../utils");
+const utils_1 = require("../utils");
 const helpers_1 = require("yargs/helpers");
 function default_1(duration = 3) {
     var _a, _b, _c;

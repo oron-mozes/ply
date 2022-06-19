@@ -1,10 +1,10 @@
 import axios from 'axios';
 import fs from 'fs';
-import { apiBaseUrl } from './consts';
-import { getPackageJson } from './src/services/read-package-json';
-import { ACTION, UserData } from './types';
+import { apiBaseUrl } from '../consts';
+import { getPackageJson } from './services/read-package-json';
+import { ACTION, UserData } from '../types';
 import { homedir } from 'os';
-import { closeTerminalIfNeeded } from './src/controller';
+import { closeTerminalIfNeeded } from './controller';
 import { echo, exit } from 'shelljs';
 import chalk from 'chalk';
 import inquirer from 'inquirer';

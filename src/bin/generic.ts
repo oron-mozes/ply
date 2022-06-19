@@ -5,7 +5,7 @@
 
 import { ChildProcess } from 'child_process';
 import { ACTION } from '../../types';
-import { onProcessEnd, shouldReportError } from '../../utils';
+import { onProcessEnd, shouldReportError } from '../utils';
 
 export const genericFn = async ({ executionProcess, startTime, executionCommand }:
   {

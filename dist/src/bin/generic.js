@@ -15,7 +15,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.genericFn = void 0;
 const types_1 = require("../../types");
-const utils_1 = require("../../utils");
+const utils_1 = require("../utils");
 const genericFn = ({ executionProcess, startTime, executionCommand }) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     let errors = [];

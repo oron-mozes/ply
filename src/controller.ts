@@ -1,12 +1,12 @@
 #! /usr/bin/env node
 
-import { echo, exec } from 'shelljs';
+import { exec } from 'shelljs';
 import { hideBin } from 'yargs/helpers'
 import { buildFn } from './bin/build';
 import axios from 'axios';
 import { apiBaseUrl } from '../consts';
 import { getPackageJson } from './services/read-package-json';
-import { getUserData, signupUser, saveData } from '../utils';
+import { getUserData, signupUser, saveData } from './utils';
 import { installFn } from './bin/install';
 import { ACTION, PACKAGE_MANAGER, ProjectData } from '../types';
 import { testFn } from './bin/test';
@@ -18,7 +18,7 @@ import path from 'path';
 
 let isTerminalActive = false;
 
-(async function () {
+async function init() {
   const user = getUserData();
 
   if (!user.id) {
@@ -158,8 +158,9 @@ let isTerminalActive = false;
         break;
     }
   };
-})();
+};
 
+init()
 export const closeTerminalIfNeeded = () => {
   if (isTerminalActive) {
     exec('osascript -e \'tell application "Terminal" to close first window\'');

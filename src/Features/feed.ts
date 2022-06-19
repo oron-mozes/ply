@@ -1,6 +1,6 @@
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
-import { getLocalStorage, getUserData, shouldReFecthData } from '../../utils';
+import { getLocalStorage, getUserData, shouldReFecthData } from '../utils';
 import { notify } from 'node-notifier';
 import axios from 'axios';
 import { apiBaseUrl } from '../../consts';

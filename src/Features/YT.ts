@@ -1,6 +1,6 @@
 import ytp from 'yt-play-cli';
 import fs from 'fs';
-import { getLocalStorage } from '../../utils';
+import { getLocalStorage } from '../utils';
 import { hideBin } from 'yargs/helpers';
 
 

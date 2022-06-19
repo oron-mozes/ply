@@ -14,6 +14,7 @@ export const gameSelectorScreen = async () => {
     choices: [
       "Trivia",
       "Speed Type",
+      "exit"
     ],
     type: "list",
     prefix: '',
@@ -34,6 +35,10 @@ export const gameSelectorScreen = async () => {
 
     case "Speed Type": {
       initSpeedType();
+      break;
+    }
+    case "exit": {
+      process.exit();
       break;
     }
   }

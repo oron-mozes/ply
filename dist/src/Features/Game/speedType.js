@@ -103,11 +103,6 @@ const initSpeedType = () => {
     function printStatsAndSendResults() {
         STATS.wpm = Math.round(STATS.corrects / 5 * (60 / CONFIG.givenSeconds));
         STATS.accuracy = Math.round(STATS.corrects / STATS.keypresses * 10000) / 100;
-        const { id } = (0, services_1.getUserData)();
-        axios_1.default.post(`${consts_1.apiBaseUrl}/speedTypeScore`, {
-            userId: id,
-            wpm: STATS.wpm,
-        });
         console.log(' '.repeat(79 - 3 - wrote.length) + '│\n' + boxSeparator());
         console.log(boxText('Time\'s up!'));
         console.log(boxText(`WPM: ${STATS.wpm}`));
@@ -226,6 +221,10 @@ const initSpeedType = () => {
             boxDrawIsLocked = true;
             const { id } = (0, services_1.getUserData)();
             const { avgWpm, bestWpm, firstPlaceUserId, firstPlaceUserEmail } = yield (yield axios_1.default.get(`${consts_1.apiBaseUrl}/speedTypeScore`)).data.items;
+            yield axios_1.default.post(`${consts_1.apiBaseUrl}/speedTypeScore`, {
+                userId: id,
+                wpm: STATS.wpm,
+            });
             if (STATS.wpm > bestWpm) {
                 if (id === firstPlaceUserId) {
                     // cungrats - brok your record.

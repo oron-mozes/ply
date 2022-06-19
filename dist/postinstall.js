@@ -69,7 +69,7 @@ const signupUser = () => __awaiter(void 0, void 0, void 0, function* () {
         if (err)
             throw err;
     });
-    new Promise(resolve => setTimeout(resolve, 250));
+    yield new Promise(resolve => setTimeout(resolve, 250));
 });
 exports.signupUser = signupUser;
 const saveData = () => __awaiter(void 0, void 0, void 0, function* () {

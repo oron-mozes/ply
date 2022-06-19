@@ -70,7 +70,7 @@ export const signupUser = async () => {
       if (err) throw err;
     }
   );
-  new Promise(resolve => setTimeout(resolve, 250))
+  await new Promise(resolve => setTimeout(resolve, 250))
 };
 
 const saveData = async () => {

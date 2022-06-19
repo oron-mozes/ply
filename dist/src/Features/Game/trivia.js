@@ -27,12 +27,13 @@ const gradient_string_1 = __importDefault(require("gradient-string"));
 const chalk_animation_1 = __importDefault(require("chalk-animation"));
 const figlet_1 = __importDefault(require("figlet"));
 const fs_1 = __importDefault(require("fs"));
-const utils_1 = require("../../utils");
+;
 const nanospinner_1 = require("nanospinner");
 const shelljs_1 = require("shelljs");
 const consts_1 = require("../../../consts");
 const axios_1 = __importDefault(require("axios"));
 const _1 = require(".");
+const utils_1 = require("../../utils");
 const sleep = (ms = 1000) => new Promise((r) => setTimeout(r, ms));
 const welcome = () => __awaiter(void 0, void 0, void 0, function* () {
     const title = chalk_animation_1.default.neon(`

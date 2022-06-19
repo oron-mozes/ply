@@ -5,7 +5,6 @@
 During installation you will be asked to enter your email address.
 
 We do not use the email in any way other then registration in our system.
-
 We will send you slack notification and you can always change that by calling:
 ``` 
   $ply config

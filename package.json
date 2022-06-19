@@ -1,6 +1,6 @@
 {
   "name": "ply-cli",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "description": "\"Ply-cli\" is a cli tool that aim to entertain you while you wait for any process to be over.",
   "main": "index.js",
   "scripts": {

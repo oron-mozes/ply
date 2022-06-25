@@ -1,14 +1,27 @@
 #!/usr/bin/env bash
+source $PWD/scripts/setup.sh
+source $directoryPath"user.sh";
 
 write () {
-    ROOT_DIRECTORY="$1"
-    DATA="$2"
-    FILE_NAME="$3"
-    mkdir -p $ROOT_DIRECTORY
+   
+    DATA="$1"
+    FILE_NAME="$2"
+    mkdir -p $directoryPath 
     
-    printf $DATA > $ROOT_DIRECTORY$FILE_NAME
+    printf "#!/usr/bin/env bash\n\n ${DATA}" > $directoryPath$FILE_NAME".sh"
 }
 
+read_file () {
+     FILE_NAME="$1"
+
+     cat $directoryPath$FILE_NAME".sh"
+}
+
+
+get_user_id() {
+    echo $uuid
+
+}
 
 ask_with_valiation () {
 
@@ -41,8 +54,13 @@ dropdown () {
 }
 
 put_action() {
-    echo $(curl -d $2 -sb -H -X PUT $1)
+    echo $(curl -d $2 -sb -H  -X PUT $1)
 }
+
+post_action() {
+    echo $(curl -d $2 -sb -H "Authorization: Bearer ${uuid}" 'Content-Type: application/json'  $1)
+}
+
 
 get_action() {
    echo $(curl -sb -H  http://localhost:3000/user)

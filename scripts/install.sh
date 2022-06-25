@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 source $PWD/scripts/style.sh
-source $PWD/scripts/setup.sh
 source $PWD/scripts/functions.sh
 
+uuid=$(get_user_id)
+
+if [[ -n "$uuid"  ]] ; then
+    exit
+fi
 
 printf "${Green}${bold}Hello, and welcome to \"ply\".
 ${normal}${Green}We are your humble assistent here at your service to help you focus on development and not chasing bugs.
@@ -35,4 +39,6 @@ fi
 
 #This is the last action where we write the json
 instance=$(put_action http://localhost:3000/user "data={\"email\":\""$emailAddress"\",\"metadata\":{\"placeOfWork\":\""$placeOfWork"\",\"osType\":\""$OSTYPE"\",\"deviceID\":\""$HOSTNAME.$MACHTYPE"\"},\"packages-manage\":{\"npm\":\"null\",\"yarn\":\"null\"},\"config\":{\"sound\":\""$withSound"\"}}")
-write $directoryPath "{\n\"id\":\""$instance"\"\n}\n" "user.json"
+write "uuid=${instance}" "user"
+write "sound=${withSound}" "config"
+

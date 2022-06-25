@@ -1,106 +1,37 @@
 #!/usr/bin/env bash
 source $PWD/scripts/style.sh
 source $PWD/scripts/setup.sh
+source $PWD/scripts/functions.sh
 
-
-withSound=0;
 
 printf "${Green}${bold}Hello, and welcome to \"ply\".
 ${normal}${Green}We are your humble assistent here at your service to help you focus on development and not chasing bugs.
 Before we can start we would like to know a littel bit about you.\nall the detail are confedential and will be used in order to provide the best service to you.
 let\'s start."
 
-greeting() {
-    read -p "What is your email address? " emailAddress
-    
-    if [[ $emailAddress =~ $emailregex ]] ; then
-       place_of_work
-    else
-        echo "Email is invalid please type again";
-        greeting
-    fi
-}
+printf "${divider}"
+emailAddress=$(ask_with_valiation $emailregex "What is your email address? " "Email is invalid please type again")
+printf "${divider}"
+placeOfWork=$(ask "It's nice to meet you $emailAddress.
+Can you please let us know what is your place of work?
+if there are any other community memeber we will make sure to link you as you are most likely to share the same development experiance. ")
+
+printf "${divider}"
+options=( "Yes" "No")
+continueToConfig="$(dropdown ${options[@]} "You are doing great.
+Lets create a personlise experiance specially for you.
+At any point in time you could always call \"ply config\" and modify the configuration.
+Would you like to continue? ")"
 
 
-place_of_work() {
+ if [[ $continueToConfig == "Yes" ]] ; then
     printf "${divider}"
-    read -p "It's nice to meet you $emailAddress.
-    Can you please let us know what is your place of work?
-    if there are any other community memeber we will make sure to link you as you are most likely to share the same development experiance." placeOfWork
-    
-    config
-}
+    options=( "Yes" "No")
+    withSound="$(dropdown ${options[@]} "We will use your OS notification for communication. Would you like to play sound?")"
+
+fi
 
 
 
-write_to_file () {
-    mkdir -p $directoryPath
-    printf '{
-        "email": "'$emailAddress'",
-        "metadata": {
-            "placeOfWork": "'$placeOfWork'"
-        },
-        "config": {
-            "sound": "'$withSound'"
-        }
-    }' > "${directoryPath}user.json"
-
-}
-
-
-config_sound () {
-    printf "${divider}"
-   PS3="We will use your OS notification for communication. Would you like to play sound?"
-        
-    select opt in Yes No Skip; do
-
-    case $opt in
-        Yes)
-        withSound=1;
-        write_to_file
-        break;;
-        No)
-        write_to_file
-        break;;
-        
-        Skip)
-        write_to_file
-        break;;
-        
-        *) 
-        echo "Invalid option $REPLY"
-        ;;
-    esac
-    done
-}
-
-config() {
-    
-    printf "${divider}"
-    PS3="You are doing great.
-            Let create a personlise experiance specially for you.
-            At any point in time you could always call \"ply config\" and modify the configuration.
-            Would you like to continue? "
-            
-    select opt in Yes No Skip; do
-
-    case $opt in
-        Yes)
-        config_sound
-        break;;
-        No)
-        write_to_file
-        break;;
-        
-        Skip)
-        write_to_file
-        break;;
-        
-        *) 
-        echo "Invalid option $REPLY"
-        ;;
-    esac
-    done
-}
-
-greeting
+#This is the last action where we write the json
+ write $directoryPath "{\n\"email\":\""$emailAddress"\",\n\"metadata\":{\n\"placeOfWork\":\""$placeOfWork"\",\n\"osType\":\""$OSTYPE"\",\n\"deviceID\":\""$HOSTNAME.$MACHTYPE"\"\n},\n\"packages-manage\":{\n\"npm\":\"null\",\n\"yarn\":\"null\"\n},\n\"config\":{\n\"sound\":\""$withSound"\"\n}\n" "user.json"

@@ -17,7 +17,7 @@ ask_with_valiation () {
     if [[ $result =~ $1 ]] ; then
        echo $result
     else
-        echo "asd";
+
         ask_with_valiation "$1" "$2" "$3"
     fi
 }
@@ -30,7 +30,7 @@ ask () {
 dropdown () {
     options=("$@")
     length=${#options[@]} 
-    
+
     PS3=${options[${#options[@]} - 1]}
     select option in "${options[@]:0:length-1}"; do
         echo $option && break
@@ -38,4 +38,12 @@ dropdown () {
         [[ $option == skip ]] && break
 
     done
+}
+
+put_action() {
+    echo $(curl -d $2 -sb -H -X PUT $1)
+}
+
+get_action() {
+   echo $(curl -sb -H  http://localhost:3000/user)
 }

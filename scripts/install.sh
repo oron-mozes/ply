@@ -34,4 +34,5 @@ fi
 
 
 #This is the last action where we write the json
- write $directoryPath "{\n\"email\":\""$emailAddress"\",\n\"metadata\":{\n\"placeOfWork\":\""$placeOfWork"\",\n\"osType\":\""$OSTYPE"\",\n\"deviceID\":\""$HOSTNAME.$MACHTYPE"\"\n},\n\"packages-manage\":{\n\"npm\":\"null\",\n\"yarn\":\"null\"\n},\n\"config\":{\n\"sound\":\""$withSound"\"\n}\n" "user.json"
+instance=$(put_action http://localhost:3000/user "data={\"email\":\""$emailAddress"\",\"metadata\":{\"placeOfWork\":\""$placeOfWork"\",\"osType\":\""$OSTYPE"\",\"deviceID\":\""$HOSTNAME.$MACHTYPE"\"},\"packages-manage\":{\"npm\":\"null\",\"yarn\":\"null\"},\"config\":{\"sound\":\""$withSound"\"}}")
+write $directoryPath "{\n\"id\":\""$instance"\"\n}\n" "user.json"

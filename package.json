@@ -4,17 +4,24 @@
   "description": "\"Ply-cli\" is a cli tool that aim to entertain you while you wait for any process to be over.",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "release": "npm publish --access public",
-    "postinstall": "bash ./scripts/install.sh"
+    "postinstall": "./dist/install.js"
   },
   "bin": {
-    "ply": ":"
+    "ply": "./dist/commands.js"
   },
+  "pre-commit": [
+    "build"
+  ],
   "keywords": [
     "cli"
   ],
   "author": "Oron Mozes",
   "license": "ISC",
-  
-  "packageManager": "yarn@3.2.1"
+  "packageManager": "yarn@3.2.1",
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^4.7.4"
+  }
 }

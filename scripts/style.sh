@@ -5,7 +5,7 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 
 Black='\033[0;30m'
-Blue='\033[0;34mm'
+Blue='\033[0;34m'
 Green='\033[0;32m'
 Cyan='\033[0;36m'
 Red='\033[0;31m'

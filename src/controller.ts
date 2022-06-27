@@ -18,10 +18,10 @@ import feed from './Features/feed';
 import path from 'path';
 import { saveUserFile } from './postinstall';
 import config from './config';
-import fs from 'fs';
+import fs from 'fs'
+import { readdir } from 'node:fs/promises';
 
 let isTerminalActive = false;
-import { readdir } from 'node:fs/promises';
 
 async function init() {
   const { rootDirectory, userFileName } = config();

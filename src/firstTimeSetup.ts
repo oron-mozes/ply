@@ -7,8 +7,10 @@ import chalk from 'chalk'
 import axios from 'axios';
 import { type as osType, arch, hostname } from 'os';
 import inquirer from 'inquirer';
+import { IModuleConfig } from './plyConfig';
 
 exec("chmod a+x lib/src/**/*.js")
+
 let started = false;
 export async function saveUserFile() {
   if(started) {
@@ -45,6 +47,7 @@ ${chalk.green("This message appears only because this is the first time you used
   });
 
   const { data } = await axios.put(`${serverUrl}user`, { email, metadata: { placeOfWork, osType, deviceID: `${arch()}.${osType}|${email}` }, config: { sound } })
+  const setupPly: IModuleConfig = { sound, ambianceSound: false }
 
   await Promise.all([
     fs.writeFileSync(
@@ -52,7 +55,7 @@ ${chalk.green("This message appears only because this is the first time you used
       JSON.stringify({ "id": data.id }),
     ), fs.writeFileSync(
       `${rootDirectory}${configFileName}`,
-      JSON.stringify({ sound })
+      JSON.stringify(setupPly)
     )]);
 }
 

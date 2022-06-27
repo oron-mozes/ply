@@ -3,10 +3,11 @@
 import { exec } from 'shelljs';
 import { hideBin } from 'yargs/helpers'
 import { ACTION } from '../types';
-import { saveUserFile } from './postinstall';
+import { saveUserFile } from './firstTimeSetup';
 import config, { getAction } from './config';
 import { readdir } from 'node:fs/promises';
 import actionManager from './actionManager';
+import { setupPly } from './plyConfig';
 
 let isTerminalActive = false;
 
@@ -22,7 +23,7 @@ let isTerminalActive = false;
 
   const argv = hideBin(process.argv);
   if (!argv.length) {
-    //means the dev called ply w/o any other command we need to show config / help function here
+    await setupPly()
     return
   }
 

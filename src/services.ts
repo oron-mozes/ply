@@ -1,6 +1,6 @@
 import axios from 'axios';
 import fs from 'fs';
-import { apiBaseUrl } from '../consts';
+import { apiBaseUrl } from './consts';
 import { getPackageJson } from './services/read-package-json';
 import { ACTION, UserData } from '../types';
 import { homedir } from 'os';

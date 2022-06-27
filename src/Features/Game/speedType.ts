@@ -6,7 +6,7 @@ import path from 'path';
 import { gameSelectorScreen } from '.';
 import inquirer from 'inquirer';
 import axios from 'axios';
-import { apiBaseUrl } from '../../../consts';
+import { apiBaseUrl } from '../../consts';
 import { getUserData } from '../../services';
 import chalk from 'chalk';
 

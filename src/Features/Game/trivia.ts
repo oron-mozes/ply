@@ -9,7 +9,7 @@ import fs from "fs";
 ;
 import { createSpinner } from "nanospinner";
 import { echo, exec } from "shelljs";
-import { apiBaseUrl } from "../../../consts";
+import { apiBaseUrl } from "../../consts";
 import axios from "axios";
 import { gameSelectorScreen } from ".";
 import { getLocalStorage, getUserData, shouldReFecthData } from '../../utils';

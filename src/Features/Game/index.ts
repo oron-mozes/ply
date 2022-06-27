@@ -2,7 +2,7 @@
 
 import { exec } from 'shelljs';
 import inquirer from "inquirer";
-import { initSnake } from './snake';
+
 import { initTrivia } from './trivia';
 import { initSpeedType } from './speedType';
 
@@ -24,7 +24,7 @@ export const gameSelectorScreen = async () => {
 
   switch (answer.gameSelector) {
     case "Snake": {
-      initSnake();
+    
       break;
     }
 

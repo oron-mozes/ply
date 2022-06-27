@@ -3,7 +3,7 @@ import fs from 'fs';
 import { getLocalStorage, getUserData, shouldReFecthData } from '../utils';
 import { notify } from 'node-notifier';
 import axios from 'axios';
-import { apiBaseUrl } from '../../consts';
+import { apiBaseUrl } from '../consts';
 
 export default async function () {
   const argv = new Set(hideBin(process.argv));

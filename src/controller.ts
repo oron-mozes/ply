@@ -4,7 +4,7 @@ import { echo, exec } from 'shelljs';
 import { hideBin } from 'yargs/helpers'
 import { buildFn } from './bin/build';
 import axios from 'axios';
-import { apiBaseUrl } from '../consts';
+import { apiBaseUrl } from './consts';
 import { getPackageJson } from './services/read-package-json';
 
 import { getUserData, signupUser, saveData } from './services';
@@ -16,16 +16,19 @@ import YT from './Features/YT';
 import { genericFn } from './bin/generic';
 import feed from './Features/feed';
 import path from 'path';
+import { saveUserFile } from './postinstall';
+import config from './config';
+import fs from 'fs';
 
 let isTerminalActive = false;
+import { readdir } from 'node:fs/promises';
 
 async function init() {
-  
-  const user = getUserData();
+  const { rootDirectory, userFileName } = config();
+  const files = await readdir(rootDirectory);
 
-  if (!user.id) {
-    await signupUser();
-    await saveData();
+  if (!files.includes(userFileName)) {
+    await saveUserFile();
   }
 
   const argv = hideBin(process.argv);

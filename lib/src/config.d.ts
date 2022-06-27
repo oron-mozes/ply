@@ -1,3 +1,4 @@
+import { ACTION } from '../types';
 interface IGeneralConfig {
     rootDirectory: string;
     userFileName: string;
@@ -6,3 +7,4 @@ interface IGeneralConfig {
 }
 declare const _default: () => IGeneralConfig;
 export default _default;
+export declare function getAction(cmd: string[]): ACTION;

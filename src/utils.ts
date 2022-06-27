@@ -4,7 +4,7 @@ import { apiBaseUrl } from './consts';
 import { getPackageJson } from './services/read-package-json';
 import { ACTION, UserData } from '../types';
 import { homedir } from 'os';
-import { closeTerminalIfNeeded } from './controller';
+import { closeTerminalIfNeeded } from '.';
 import { echo, exit } from 'shelljs';
 import chalk from 'chalk';
 import inquirer from 'inquirer';

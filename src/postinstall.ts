@@ -9,9 +9,12 @@ import { type as osType, arch, hostname } from 'os';
 import inquirer from 'inquirer';
 
 exec("chmod a+x lib/src/**/*.js")
-
+let started = false;
 export async function saveUserFile() {
-
+  if(started) {
+    return;
+  }
+  started = true;
   const { rootDirectory, userFileName, serverUrl, configFileName } = config();
 
   const { email } = await inquirer.prompt({

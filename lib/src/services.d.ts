@@ -1,0 +1,12 @@
+import { ACTION, UserData } from '../types';
+export declare const getLocalStorage: () => string;
+export declare const getUserData: () => UserData;
+export declare function shouldReportError(error: string): boolean;
+export declare function reportProcessDuration(startTime: number, action: ACTION | string): Promise<void>;
+export declare function reportErrors(errors: string[], action: string): Promise<void>;
+export declare const shouldReFecthData: (timesetmp: number, timeInHours?: number) => boolean;
+export declare const onProcessEnd: (startTime: number, action: ACTION, errors: string[]) => Promise<never>;
+export declare const sendProcessDoneSlackMessage: (userId: string, projectName: string, action: ACTION) => Promise<void>;
+export declare const saveData: () => Promise<void>;
+export declare const signupUser: () => Promise<void>;
+export declare const sleep: (ms: number) => Promise<unknown>;
